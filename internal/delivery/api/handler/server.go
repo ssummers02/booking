@@ -1,0 +1,75 @@
+package handler
+
+import (
+	"booking/internal/delivery/api/middleware"
+	"booking/internal/domain/service"
+	"context"
+
+	"net/http"
+	"time"
+
+	"github.com/go-playground/validator/v10"
+	"github.com/gorilla/mux"
+)
+
+type Server struct {
+	httpServer *http.Server
+	r          *mux.Router
+	v          *validator.Validate
+	services   *service.Service
+	m          *middleware.M
+}
+
+//nolint:gomnd
+func NewServer(port string, services *service.Service, m *middleware.M) *Server {
+	r := mux.NewRouter()
+
+	return &Server{
+		httpServer: &http.Server{
+			Addr:           ":" + port,
+			Handler:        r,
+			MaxHeaderBytes: 1 << 20, // 1 MB
+			ReadTimeout:    10 * time.Second,
+			WriteTimeout:   10 * time.Second,
+		},
+		r:        r,
+		v:        validator.New(),
+		services: services,
+		m:        m,
+	}
+}
+
+func (s *Server) Run() error {
+	s.r.Use(s.m.Recovery.Handler, s.m.Cors.Handler, s.m.Auth.Handler)
+	// s.r.Use(s.m.Cors.Handler, s.m.Auth.Handler)
+	s.initRoutes()
+
+	return s.httpServer.ListenAndServe()
+}
+
+func (s *Server) Shutdown(ctx context.Context) error {
+	return s.httpServer.Shutdown(ctx)
+}
+
+func (s *Server) initRoutes() {
+	router := s.r.PathPrefix("/api").
+		Subrouter()
+	router.HandleFunc("/user/register", s.register).Methods(http.MethodPost)
+	router.HandleFunc("/user/login", s.signIn).Methods(http.MethodPost)
+
+	router.HandleFunc("/cities", s.getCities).Methods(http.MethodGet)
+
+	router.HandleFunc("/resorts/{id:[0-9]+}", s.getResortByID).Methods(http.MethodGet)
+	router.HandleFunc("/resorts", s.getResorts).Methods(http.MethodGet)
+	router.HandleFunc("/resorts", s.createResort).Methods(http.MethodPost)
+	router.HandleFunc("/resorts", s.updateResort).Methods(http.MethodPut)
+
+	/*	router.HandleFunc("/user", s.getUser).
+			Methods(http.MethodGet)
+		router.HandleFunc("/user", s.createUser).
+			Methods(http.MethodPost)
+		router.HandleFunc("/user", s.updateUser).
+			Methods(http.MethodPut)
+		router.HandleFunc("/user", s.deleteUser).
+			Methods(http.MethodDelete)*/
+}

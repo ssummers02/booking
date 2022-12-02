@@ -1,0 +1,20 @@
+# IDEs files
+.idea*
+.vscode*
+
+#configs
+*.env
+
+#binary
+/build
+golangci-lint
+migrate-cli
+
+#logs
+.log*
+
+#vendor
+/vendor
+
+# sql
+dump.sql

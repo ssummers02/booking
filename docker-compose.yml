@@ -1,0 +1,43 @@
+version: '3.8'
+
+services:
+  db:
+    image: "postgres:14.1"
+    environment:
+      - POSTGRES_DB=${DB_NAME}
+      - POSTGRES_USER=${DB_USERNAME}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+    volumes:
+      - db:/var/lib/postgresql/data/
+    ports:
+      - ${DB_PORT}:5432
+      - "5433:5433"
+    restart: on-failure
+    networks:
+      - internet_of_things
+
+  app:
+    build: ./
+    command: ./app
+    restart: always
+    ports:
+      - ${HTTP_PORT}:8080
+    depends_on:
+      - db
+    environment:
+      - DB_SCHEME=${DB_SCHEME}
+      - DB_HOST=${DB_HOST}
+      - DB_PORT=${DB_PORT}
+      - DB_NAME=${DB_NAME}
+      - DB_USERNAME=${DB_USERNAME}
+      - DB_PASSWORD=${DB_PASSWORD}
+
+    networks:
+      - internet_of_things
+
+
+networks:
+  internet_of_things:
+
+volumes:
+  db:

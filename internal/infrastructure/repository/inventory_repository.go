@@ -58,3 +58,46 @@ func (r *InventoryRepository) CreateInventory(ctx context.Context, e entity.Inve
 
 	return dto.InventoryFromDB(inventory), err
 }
+
+func (r *InventoryRepository) UpdateInventory(ctx context.Context, e entity.Inventory) (entity.Inventory, error) {
+	inventory := dto.InventoryToDB(e)
+
+	err := r.BeginTx(ctx, func(tx *dbr.Tx) error {
+		_, err := tx.Update("inventory").
+			Set("price", inventory.Price).
+			Set("photo", inventory.Photo).
+			Where("id = ?", inventory.ID).
+			Exec()
+		if err != nil {
+			return err
+		}
+
+		return err
+	})
+
+	return dto.InventoryFromDB(inventory), err
+}
+
+func (r *InventoryRepository) DeleteInventory(ctx context.Context, id int64) error {
+	return r.BeginTx(ctx, func(tx *dbr.Tx) error {
+		_, err := tx.DeleteFrom("inventory").
+			Where("id = ?", id).
+			Exec()
+
+		return err
+	})
+}
+
+func (r *InventoryRepository) GetInventoriesTypes(ctx context.Context) ([]entity.InventoryType, error) {
+	var types []dbmodel.InventoryType
+
+	err := r.BeginTx(ctx, func(tx *dbr.Tx) error {
+		_, err := tx.Select("*").
+			From("inventory_type").
+			Load(&types)
+
+		return err
+	})
+
+	return dto.InventoryTypesFromDB(types), err
+}

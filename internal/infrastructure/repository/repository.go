@@ -52,7 +52,8 @@ func NewRepository(db *dbr.Connection) *service.Storages {
 	base := &DBConn{db}
 
 	return &service.Storages{
-		User:   NewUserRepository(base),
-		Resort: NewResortRepository(base),
+		User:      NewUserRepository(base),
+		Resort:    NewResortRepository(base),
+		Inventory: NewInventoryRepository(base),
 	}
 }

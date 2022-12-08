@@ -17,8 +17,9 @@ type Logger interface {
 
 type Service struct {
 	entity.Transactioner
-	UsersService   UsersService
-	ResortsService ResortsService
+	UsersService     UsersService
+	ResortsService   ResortsService
+	InventoryService InventoryService
 }
 
 func (s *Service) DoTransaction(ctx context.Context, f func() error) (err error) {
@@ -39,13 +40,18 @@ func (s *Service) DoTransaction(ctx context.Context, f func() error) (err error)
 }
 
 func NewServices(r *Storages) *Service {
+	user := NewUsersService(r.User)
+	resort := NewResortsService(r.Resort)
+	inventory := NewInventoryService(r.Inventory, resort)
 	return &Service{
-		UsersService:   *NewUsersService(r.User),
-		ResortsService: *NewResortsService(r.Resort),
+		UsersService:     *user,
+		ResortsService:   *resort,
+		InventoryService: *inventory,
 	}
 }
 
 type Storages struct {
-	User   UserStorage
-	Resort ResortStorage
+	User      UserStorage
+	Resort    ResortStorage
+	Inventory InventoryStorage
 }

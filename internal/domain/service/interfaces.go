@@ -23,3 +23,14 @@ type ResortStorage interface {
 	GetResortsByCityID(ctx context.Context, cityID int64) ([]entity.Resort, error)
 	GetCities(ctx context.Context) ([]entity.City, error)
 }
+
+type InventoryStorage interface {
+	entity.Transactioner
+
+	GetInventoryByID(ctx context.Context, id int64) (entity.Inventory, error)
+	GetInventoryByResortID(ctx context.Context, resortID int64) ([]entity.Inventory, error)
+	CreateInventory(ctx context.Context, e entity.Inventory) (entity.Inventory, error)
+	DeleteInventory(ctx context.Context, id int64) error
+	UpdateInventory(ctx context.Context, e entity.Inventory) (entity.Inventory, error)
+	GetInventoriesTypes(ctx context.Context) ([]entity.InventoryType, error)
+}

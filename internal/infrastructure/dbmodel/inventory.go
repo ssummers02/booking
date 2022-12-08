@@ -7,3 +7,8 @@ type Inventory struct {
 	Price    int64  `db:"price"`
 	Photo    string `db:"photo"`
 }
+
+type InventoryType struct {
+	ID   int64  `db:"id"`
+	Name string `db:"name"`
+}

@@ -7,3 +7,8 @@ type Inventory struct {
 	Price    int64
 	Photo    string
 }
+
+type InventoryType struct {
+	ID   int64
+	Name string
+}

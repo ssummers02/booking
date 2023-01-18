@@ -59,6 +59,29 @@ func (s *Server) getResortByID(w http.ResponseWriter, r *http.Request) {
 	SendOK(w, http.StatusOK, dto.ResortToRest(resort))
 }
 
+func (s *Server) getResortsByCityID(w http.ResponseWriter, r *http.Request) {
+	var (
+		ctx = r.Context()
+		id  = mux.Vars(r)["id"]
+	)
+
+	parseID, err := strconv.ParseInt(id, 10, 64)
+	if err != nil {
+		SendErr(w, http.StatusInternalServerError, err.Error())
+
+		return
+	}
+
+	resort, err := s.services.ResortsService.GetResortsByCityID(ctx, parseID)
+	if err != nil {
+		SendErr(w, http.StatusInternalServerError, err.Error())
+
+		return
+	}
+
+	SendOK(w, http.StatusOK, dto.ResortsToRest(resort))
+}
+
 func (s *Server) createResort(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 

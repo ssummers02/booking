@@ -1,6 +1,7 @@
 package middleware
 
 import (
+	"log"
 	"net/http"
 )
 
@@ -24,6 +25,7 @@ func (m *Cors) Handler(next http.Handler) http.Handler {
 				header.Set("Access-Control-Allow-Headers", "*")
 			}
 
+			log.Printf("CORS: %s %s", r.Method, r.URL.Path)
 			next.ServeHTTP(w, r)
 		},
 	)

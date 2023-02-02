@@ -141,13 +141,15 @@ VALUES ('Сноуборд'),
 
 CREATE TABLE inventory
 (
-    id         BIGSERIAL   NOT NULL PRIMARY KEY,
-    type_id    BIGINT      NOT NULL,
-    resort_id  BIGINT      NOT NULL REFERENCES resorts (id),
-    price      BIGINT      NOT NULL DEFAULT 0,
-    photo      TEXT        NOT NULL DEFAULT '',
-    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-    updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+    id              BIGSERIAL   NOT NULL PRIMARY KEY,
+    type_id         BIGINT      NOT NULL,
+    resort_id       BIGINT      NOT NULL REFERENCES resorts (id),
+    price           BIGINT      NOT NULL DEFAULT 0,
+    photo           TEXT        NOT NULL DEFAULT '',
+    available_start TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    available_end   TIMESTAMPTZ NULL     DEFAULT NULL,
+    created_at      TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    updated_at      TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
 INSERT INTO inventory (type_id, resort_id, price)
 VALUES (1, 1, 1000),

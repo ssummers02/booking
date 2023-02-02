@@ -40,8 +40,8 @@ func NewServer(port string, services *service.Service, m *middleware.M) *Server 
 }
 
 func (s *Server) Run() error {
-	s.r.Use(s.m.Recovery.Handler, s.m.Cors.Handler, s.m.Auth.Handler)
-	// s.r.Use(s.m.Cors.Handler, s.m.Auth.Handler)
+	//s.r.Use(s.m.Recovery.Handler, s.m.Cors.Handler, s.m.Auth.Handler)
+	s.r.Use(s.m.Cors.Handler, s.m.Auth.Handler)
 	s.initRoutes()
 
 	return s.httpServer.ListenAndServe()
@@ -60,7 +60,7 @@ func (s *Server) initRoutes() {
 	router.HandleFunc("/cities", s.getCities).Methods(http.MethodGet)
 
 	router.HandleFunc("/resorts/{id:[0-9]+}", s.getResortByID).Methods(http.MethodGet)
-	router.HandleFunc("/resorts/city/{id:[0-9]+}", s.getResortsByCityID).Methods(http.MethodGet)
+	router.HandleFunc("/resorts", s.getResortsByCityID).Queries("city_id", "{[0-9]*?}").Methods(http.MethodGet)
 	router.HandleFunc("/resorts", s.getResorts).Methods(http.MethodGet)
 	router.HandleFunc("/resorts", s.createResort).Methods(http.MethodPost)
 	router.HandleFunc("/resorts", s.updateResort).Methods(http.MethodPut)

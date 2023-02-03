@@ -17,3 +17,8 @@ type City struct {
 	ID   int64
 	Name string
 }
+
+type Filter struct {
+	CityID *int64 `json:"city_id"`
+	TypeID *int64 `json:"type_id"`
+}

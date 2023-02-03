@@ -69,8 +69,8 @@ func (s *ResortsService) UpdateResort(ctx context.Context, e entity.Resort) (ent
 	return s.repo.UpdateResort(ctx, e)
 }
 
-func (s *ResortsService) GetResortsByCityID(ctx context.Context, cityID int64) ([]entity.Resort, error) {
-	return s.repo.GetResortsByCityID(ctx, cityID)
+func (s *ResortsService) GetResortsByFilter(ctx context.Context, filter entity.Filter) ([]entity.Resort, error) {
+	return s.repo.GetResortsByFilter(ctx, filter)
 }
 
 func (s *ResortsService) GetCities(ctx context.Context) ([]entity.City, error) {

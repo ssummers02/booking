@@ -100,17 +100,29 @@ func (r *ResortRepository) GetCities(ctx context.Context) ([]entity.City, error)
 	return dto.CitiesFromDB(cities), err
 }
 
-func (r *ResortRepository) GetResortsByCityID(ctx context.Context, cityID int64) ([]entity.Resort, error) {
+func (r *ResortRepository) GetResortsByFilter(ctx context.Context, filter entity.Filter) ([]entity.Resort, error) {
 	var resorts []dbmodel.Resort
 
 	err := r.BeginTx(ctx, func(tx *dbr.Tx) error {
-		_, err := tx.Select("*").
+		stmt := tx.Select("resorts.*").
 			From("resorts").
-			Where("city_id = ?", cityID).
-			Load(&resorts)
+			LeftJoin("inventory", "resorts.id = inventory.resort_id").
+			GroupBy("resorts.id")
+		setFilter(stmt, filter)
+
+		_, err := stmt.Load(&resorts)
 
 		return err
 	})
 
 	return dto.ResortsFromDB(resorts), err
+}
+
+func setFilter(stmt *dbr.SelectStmt, filter entity.Filter) {
+	if filter.CityID != nil {
+		stmt.Where("city_id = ?", filter.CityID)
+	}
+	if filter.TypeID != nil {
+		stmt.Where("inventory.type_id = ?", filter.TypeID)
+	}
 }

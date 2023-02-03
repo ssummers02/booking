@@ -20,7 +20,7 @@ type ResortStorage interface {
 	CreateResort(ctx context.Context, e entity.Resort) (entity.Resort, error)
 	DeleteResort(ctx context.Context, id int64) error
 	UpdateResort(ctx context.Context, e entity.Resort) (entity.Resort, error)
-	GetResortsByCityID(ctx context.Context, cityID int64) ([]entity.Resort, error)
+	GetResortsByFilter(ctx context.Context, filter entity.Filter) ([]entity.Resort, error)
 	GetCities(ctx context.Context) ([]entity.City, error)
 }
 

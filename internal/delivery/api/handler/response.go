@@ -32,6 +32,7 @@ func SendErr(w http.ResponseWriter, code int, text string) {
 func SendOK(w http.ResponseWriter, code int, p interface{}) {
 	w.WriteHeader(code)
 	w.Header().Add("Content-Type", "application/json")
+	w.Header().Add("Access-Control-Allow-Origin", "*") // These two do not allow body
 
 	// These two do not allow body
 	_ = json.NewEncoder(w).Encode(

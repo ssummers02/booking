@@ -3,6 +3,7 @@ package handler
 import (
 	"booking/internal/delivery/api/restmodel"
 	"booking/internal/domain/dto"
+	"booking/internal/domain/entity"
 	"encoding/json"
 	"net/http"
 	"strconv"
@@ -63,20 +64,26 @@ func (s *Server) getResortByID(w http.ResponseWriter, r *http.Request) {
 }
 
 // Возвращает массив всех курортов по городу
-func (s *Server) getResortsByCityID(w http.ResponseWriter, r *http.Request) {
+func (s *Server) getResortsByFilter(w http.ResponseWriter, r *http.Request) {
 	var (
-		ctx = r.Context()
-		id  = r.FormValue("city_id")
+		ctx  = r.Context()
+		data entity.Filter
 	)
 
-	parseID, err := strconv.ParseInt(id, 10, 64)
+	err := json.NewDecoder(r.Body).Decode(&data)
 	if err != nil {
-		SendErr(w, http.StatusInternalServerError, err.Error())
+		SendErr(w, http.StatusBadRequest, "invalid json")
 
 		return
 	}
 
-	resort, err := s.services.ResortsService.GetResortsByCityID(ctx, parseID)
+	err = s.v.Struct(data)
+	if err != nil {
+		SendErr(w, http.StatusBadRequest, err.Error())
+
+		return
+	}
+	resort, err := s.services.ResortsService.GetResortsByFilter(ctx, data)
 	if err != nil {
 		SendErr(w, http.StatusInternalServerError, err.Error())
 

@@ -60,7 +60,7 @@ func (s *Server) initRoutes() {
 	router.HandleFunc("/cities", s.getCities).Methods(http.MethodGet)
 
 	router.HandleFunc("/resorts/{id:[0-9]+}", s.getResortByID).Methods(http.MethodGet)
-	router.HandleFunc("/resorts", s.getResortsByCityID).Queries("city_id", "{[0-9]*?}").Methods(http.MethodGet)
+	router.HandleFunc("/resorts/filter", s.getResortsByFilter).Methods(http.MethodPost)
 	router.HandleFunc("/resorts", s.getResorts).Methods(http.MethodGet)
 	router.HandleFunc("/resorts", s.createResort).Methods(http.MethodPost)
 	router.HandleFunc("/resorts", s.updateResort).Methods(http.MethodPut)
@@ -71,7 +71,7 @@ func (s *Server) initRoutes() {
 
 	router.HandleFunc("/inventories", s.createInventory).Methods(http.MethodPost)
 	router.HandleFunc("/inventories", s.updateInventory).Methods(http.MethodPut)
-	router.HandleFunc("/inventories/types", s.getInventoryTypes).Methods(http.MethodPut)
+	router.HandleFunc("/inventories/types", s.getInventoryTypes).Methods(http.MethodGet)
 	router.HandleFunc("/inventories/{id:[0-9]+}", s.deleteInventory).Methods(http.MethodDelete)
 
 	/*	router.HandleFunc("/user", s.getUser).

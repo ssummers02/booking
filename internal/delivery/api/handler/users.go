@@ -4,6 +4,7 @@ import (
 	"booking/internal/delivery/api/restmodel"
 	"booking/internal/domain/dto"
 	"encoding/json"
+	"log"
 	"net/http"
 )
 
@@ -52,6 +53,7 @@ func (s *Server) register(w http.ResponseWriter, r *http.Request) {
 
 	err := json.NewDecoder(r.Body).Decode(&data)
 	if err != nil {
+		log.Printf("error: %v", err)
 		SendErr(w, http.StatusBadRequest, "invalid json")
 
 		return

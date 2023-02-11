@@ -5,6 +5,8 @@ import (
 	"booking/internal/domain/entity"
 	"booking/internal/infrastructure/dbmodel"
 	"context"
+	"log"
+	"time"
 
 	"github.com/gocraft/dbr/v2"
 )
@@ -106,7 +108,7 @@ func (r *ResortRepository) GetResortsByFilter(ctx context.Context, filter entity
 	err := r.BeginTx(ctx, func(tx *dbr.Tx) error {
 		stmt := tx.Select("resorts.*").
 			From("resorts").
-			LeftJoin("inventory", "resorts.id = inventory.resort_id").
+			Join("inventory", "resorts.id = inventory.resort_id").
 			GroupBy("resorts.id")
 		setFilter(stmt, filter)
 
@@ -124,5 +126,20 @@ func setFilter(stmt *dbr.SelectStmt, filter entity.Filter) {
 	}
 	if filter.TypeID != nil {
 		stmt.Where("inventory.type_id = ?", filter.TypeID)
+	}
+	if filter.StartDate != nil {
+		startDate, _ := time.Parse("2006-01-02", *filter.StartDate)
+		endDay := startDate.AddDate(0, 0, int(*filter.Duration))
+		log.Printf("start date: %s, end date: %s", startDate.Format("2006-01-02"), endDay.Format("2006-01-02"))
+		stmt.LeftJoin("bookings", dbr.And(
+			dbr.Expr("bookings.inventory_id = inventory.id"),
+		))
+		stmt.Where(
+			dbr.Or(
+				dbr.Expr("bookings.id IS NULL"),
+				dbr.Expr("bookings.start_date > ?", startDate.Format("2006-01-02")),
+				dbr.Expr("bookings.end_date < ?", endDay.Format("2006-01-02")),
+			))
+		stmt.Having("COUNT(inventory.id) > 0")
 	}
 }

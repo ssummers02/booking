@@ -19,6 +19,8 @@ type City struct {
 }
 
 type Filter struct {
-	CityID *int64 `json:"city_id"`
-	TypeID *int64 `json:"type_id"`
+	CityID    *int64  `json:"city_id"`
+	TypeID    *int64  `json:"type_id"`
+	StartDate *string `json:"start_date"`
+	Duration  *int64  `json:"duration"`
 }

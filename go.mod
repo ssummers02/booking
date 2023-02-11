@@ -13,6 +13,7 @@ require (
 	github.com/lib/pq v1.10.7
 	github.com/sirupsen/logrus v1.8.1
 	golang.org/x/crypto v0.0.0-20211215153901-e495a2d5b3d3
+	google.golang.org/genproto v0.0.0-20220314164441-57ef72a4c106
 )
 
 require (
@@ -24,4 +25,5 @@ require (
 	go.uber.org/atomic v1.7.0 // indirect
 	golang.org/x/sys v0.0.0-20220317061510-51cd9980dadf // indirect
 	golang.org/x/text v0.3.7 // indirect
+	google.golang.org/protobuf v1.27.1 // indirect
 )

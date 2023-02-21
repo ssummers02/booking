@@ -14,14 +14,14 @@ services:
       - "5433:5433"
     restart: on-failure
     networks:
-      - internet_of_things
+      - booking
 
   app:
     build: ./
     command: ./app
     restart: always
     ports:
-      - ${HTTP_PORT}:8080
+      - ${HTTP_PORT}:8081
     depends_on:
       - db
     environment:
@@ -33,11 +33,11 @@ services:
       - DB_PASSWORD=${DB_PASSWORD}
 
     networks:
-      - internet_of_things
+      - booking
 
 
 networks:
-  internet_of_things:
+  booking:
 
 volumes:
   db:

@@ -5,6 +5,8 @@ import (
 	"booking/internal/domain/entity"
 	"booking/internal/infrastructure/dbmodel"
 	"context"
+	"log"
+	"time"
 
 	"github.com/gocraft/dbr/v2"
 )
@@ -100,17 +102,44 @@ func (r *ResortRepository) GetCities(ctx context.Context) ([]entity.City, error)
 	return dto.CitiesFromDB(cities), err
 }
 
-func (r *ResortRepository) GetResortsByCityID(ctx context.Context, cityID int64) ([]entity.Resort, error) {
+func (r *ResortRepository) GetResortsByFilter(ctx context.Context, filter entity.Filter) ([]entity.Resort, error) {
 	var resorts []dbmodel.Resort
 
 	err := r.BeginTx(ctx, func(tx *dbr.Tx) error {
-		_, err := tx.Select("*").
+		stmt := tx.Select("resorts.*").
 			From("resorts").
-			Where("city_id = ?", cityID).
-			Load(&resorts)
+			Join("inventory", "resorts.id = inventory.resort_id").
+			GroupBy("resorts.id")
+		setFilter(stmt, filter)
+
+		_, err := stmt.Load(&resorts)
 
 		return err
 	})
 
 	return dto.ResortsFromDB(resorts), err
+}
+
+func setFilter(stmt *dbr.SelectStmt, filter entity.Filter) {
+	if filter.CityID != nil {
+		stmt.Where("city_id = ?", filter.CityID)
+	}
+	if filter.TypeID != nil {
+		stmt.Where("inventory.type_id = ?", filter.TypeID)
+	}
+	if filter.StartDate != nil {
+		startDate, _ := time.Parse("2006-01-02", *filter.StartDate)
+		endDay := startDate.AddDate(0, 0, int(*filter.Duration))
+		log.Printf("start date: %s, end date: %s", startDate.Format("2006-01-02"), endDay.Format("2006-01-02"))
+		stmt.LeftJoin("bookings", dbr.And(
+			dbr.Expr("bookings.inventory_id = inventory.id"),
+		))
+		stmt.Where(
+			dbr.Or(
+				dbr.Expr("bookings.id IS NULL"),
+				dbr.Expr("bookings.start_date > ?", startDate.Format("2006-01-02")),
+				dbr.Expr("bookings.end_date < ?", endDay.Format("2006-01-02")),
+			))
+		stmt.Having("COUNT(inventory.id) > 0")
+	}
 }

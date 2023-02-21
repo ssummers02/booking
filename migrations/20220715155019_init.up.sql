@@ -116,23 +116,19 @@ CREATE TABLE resorts
     updated_at  TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
 INSERT INTO resorts (name, city_id, description, address, owner_id)
-VALUES ('Курорт в Москве', 1, 'Описание курорта в Москве', 'Адрес курорта в Москве', 3),
+VALUES ('Курорт в Москве 1', 1, 'Описание курорта в Москве 1', 'Адрес курорта в Москве', 3),
+       ('Курорт в Москве 2', 1, 'Описание курорта в Москве 2', 'Адрес курорта в Москве', 3),
+       ('Курорт в Москве 3', 1, 'Описание курорта в Москве 3', 'Адрес курорта в Москве', 3),
+       ('Курорт в Москве 4', 1, 'Описание курорта в Москве 4', 'Адрес курорта в Москве', 3),
        ('Курорт в Санкт-Петербурге', 2, 'Описание курорта в Санкт-Петербурге', 'Адрес курорта в Санкт-Петербурге', 3),
-       ('Курорт в Новосибирске', 3, 'Описание курорта в Новосибирске', 'Адрес курорта в Новосибирске', 3),
-       ('Курорт в Екатеринбурге', 4, 'Описание курорта в Екатеринбурге', 'Адрес курорта в Екатеринбурге', 3),
-       ('Курорт в Нижнем Новгороде', 5, 'Описание курорта в Нижнем Новгороде', 'Адрес курорта в Нижнем Новгороде', 3),
-       ('Курорт в Казани', 6, 'Описание курорта в Казани', 'Адрес курорта в Казани', 3),
-       ('Курорт в Челябинске', 7, 'Описание курорта в Челябинске', 'Адрес курорта в Челябинске', 3),
-       ('Курорт в Омске', 8, 'Описание курорта в Омске', 'Адрес курорта в Омске', 3),
-       ('Курорт в Самаре', 9, 'Описание курорта в Самаре', 'Адрес курорта в Самаре', 3),
-       ('Курорт в Ростове-на-Дону', 10, 'Описание курорта в Ростове-на-Дону', 'Адрес курорта в Ростове-на-Дону', 3);
-
-CREATE TABLE inventory_types
+       ('Курорт в Казани 1', 3, 'Описание курорта в Казани', 'Адрес курорта в Казани', 3),
+       ('Курорт в Казани 2', 3, 'Описание курорта в Казани 2', 'Адрес курорта в Казани', 3);
+CREATE TABLE inventory_type
 (
     id   BIGSERIAL NOT NULL PRIMARY KEY,
     name TEXT      NOT NULL
 );
-INSERT INTO inventory_types (name)
+INSERT INTO inventory_type (name)
 VALUES ('Сноуборд'),
        ('Коньки'),
        ('Лыжи'),
@@ -141,13 +137,15 @@ VALUES ('Сноуборд'),
 
 CREATE TABLE inventory
 (
-    id         BIGSERIAL   NOT NULL PRIMARY KEY,
-    type_id    BIGINT      NOT NULL,
-    resort_id  BIGINT      NOT NULL REFERENCES resorts (id),
-    price      BIGINT      NOT NULL DEFAULT 0,
-    photo      TEXT        NOT NULL DEFAULT '',
-    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-    updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+    id              BIGSERIAL   NOT NULL PRIMARY KEY,
+    type_id         BIGINT      NOT NULL,
+    resort_id       BIGINT      NOT NULL REFERENCES resorts (id),
+    price           BIGINT      NOT NULL DEFAULT 0,
+    photo           TEXT        NOT NULL DEFAULT '',
+    available_start TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    available_end   TIMESTAMPTZ NULL     DEFAULT NULL,
+    created_at      TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    updated_at      TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
 INSERT INTO inventory (type_id, resort_id, price)
 VALUES (1, 1, 1000),
@@ -215,18 +213,7 @@ VALUES (1, 1, 1000),
        (3, 7, 100),
        (4, 7, 100),
        (5, 7, 100),
-       (1, 8, 1000),
-       (2, 8, 500),
-       (3, 8, 100),
-       (4, 8, 100),
-       (5, 8, 100),
-       (1, 9, 1000),
-       (2, 9, 500),
-       (3, 9, 100),
-       (4, 9, 100),
-       (5, 9, 100),
-       (1, 10, 1000),
-       (2, 10, 500),
+
        (5, 4, 100),
        (1, 5, 1000),
        (2, 5, 500),
@@ -245,26 +232,7 @@ VALUES (1, 1, 1000),
        (2, 6, 500),
        (3, 6, 100),
        (4, 6, 100),
-       (5, 6, 100),
-       (1, 7, 1000),
-       (2, 7, 500),
-       (3, 7, 100),
-       (4, 7, 100),
-       (5, 7, 100),
-       (1, 8, 1000),
-       (2, 8, 500),
-       (3, 8, 100),
-       (4, 8, 100),
-       (5, 8, 100),
-       (1, 9, 1000),
-       (2, 9, 500),
-       (3, 9, 100),
-       (4, 9, 100),
-       (5, 9, 100),
-       (1, 10, 1000),
-       (2, 10, 500),
-       (3, 10, 100),
-       (4, 10, 100);
+       (5, 6, 100);
 
 
 CREATE TABLE bookings

@@ -3,11 +3,8 @@
 # Default command for prepare code for a commit
 default: format lint-fix
 
-build:
-	docker-compose build link-app
-
 run:
-	docker-compose up link-app
+	docker compose up -d --build
 
 migrate-install:
 	go install -tags 'postgres' github.com/golang-migrate/migrate/v4/cmd/migrate@v4.15.1

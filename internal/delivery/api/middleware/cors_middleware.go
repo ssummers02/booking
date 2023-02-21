@@ -1,6 +1,7 @@
 package middleware
 
 import (
+	"log"
 	"net/http"
 )
 
@@ -19,11 +20,9 @@ func (m *Cors) Handler(next http.Handler) http.Handler {
 			header.Set("Accept", "application/json")
 			header.Set("Content-Type", "application/json")
 			header.Set("Access-Control-Allow-Origin", "*")
+			header.Set("Access-Control-Allow-Methods", "GET, OPTIONS, POST, PUT")
 
-			if r.Method == http.MethodOptions {
-				header.Set("Access-Control-Allow-Headers", "*")
-			}
-
+			log.Printf("CORS: %s %s", r.Method, r.URL.Path)
 			next.ServeHTTP(w, r)
 		},
 	)

@@ -28,7 +28,7 @@ func newRequest(url string, jsonStr []byte, method string) (int, []byte) {
 	return resp.StatusCode, body
 }
 func TestGetCities(t *testing.T) {
-	//go app.Run()
+	// go app.Run()
 	url := "http://localhost:8080/api/cities"
 	code, body := newRequest(url, nil, http.MethodGet)
 	checkResponseCode(t, http.StatusOK, code)

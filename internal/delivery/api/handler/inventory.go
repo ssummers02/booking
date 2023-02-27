@@ -10,7 +10,7 @@ import (
 	"github.com/gorilla/mux"
 )
 
-// Получает инвентарь по id инвентаря
+// Получает инвентарь по id инвентаря.
 func (s *Server) getInventoryByID(w http.ResponseWriter, r *http.Request) {
 	var (
 		ctx = r.Context()
@@ -34,7 +34,7 @@ func (s *Server) getInventoryByID(w http.ResponseWriter, r *http.Request) {
 	SendOK(w, http.StatusOK, dto.InventoryToRest(inventory))
 }
 
-// Массив доступных инвентарей по id отеля
+// Массив доступных инвентарей по id отеля.
 func (s *Server) getInventoryByResortID(w http.ResponseWriter, r *http.Request) {
 	var (
 		ctx = r.Context()
@@ -58,7 +58,7 @@ func (s *Server) getInventoryByResortID(w http.ResponseWriter, r *http.Request) 
 	SendOK(w, http.StatusOK, dto.InventorysToRest(inventory))
 }
 
-// Создает инвентарь
+// Создает инвентарь.
 func (s *Server) createInventory(w http.ResponseWriter, r *http.Request) {
 	var (
 		ctx = r.Context()
@@ -90,7 +90,7 @@ func (s *Server) createInventory(w http.ResponseWriter, r *http.Request) {
 	SendOK(w, http.StatusOK, dto.InventoryToRest(inventory))
 }
 
-// обновляет инвентарь
+// обновляет инвентарь.
 func (s *Server) updateInventory(w http.ResponseWriter, r *http.Request) {
 	var (
 		ctx  = r.Context()
@@ -100,6 +100,7 @@ func (s *Server) updateInventory(w http.ResponseWriter, r *http.Request) {
 	err := json.NewDecoder(r.Body).Decode(&data)
 	if err != nil {
 		SendErr(w, http.StatusBadRequest, "invalid json")
+
 		return
 	}
 
@@ -136,7 +137,7 @@ func (s *Server) deleteInventory(w http.ResponseWriter, r *http.Request) {
 	SendOK(w, http.StatusOK, nil)
 }
 
-// Возвращает доступные типы инвентаря для создания
+// Возвращает доступные типы инвентаря для создания.
 func (s *Server) getInventoryTypes(w http.ResponseWriter, r *http.Request) {
 	var (
 		ctx = r.Context()
@@ -152,7 +153,7 @@ func (s *Server) getInventoryTypes(w http.ResponseWriter, r *http.Request) {
 	SendOK(w, http.StatusOK, dto.InventoryTypesToRest(inventoryTypes))
 }
 
-// Возвращает инвертарь по курорту
+// Возвращает инвертарь по курорту.
 func (s *Server) getInventoryByResort(w http.ResponseWriter, r *http.Request) {
 	var (
 		ctx = r.Context()

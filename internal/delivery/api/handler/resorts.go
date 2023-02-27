@@ -11,7 +11,7 @@ import (
 	"github.com/gorilla/mux"
 )
 
-// Возвращает массив городов
+// Возвращает массив городов.
 func (s *Server) getCities(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 
@@ -25,7 +25,7 @@ func (s *Server) getCities(w http.ResponseWriter, r *http.Request) {
 	SendOK(w, http.StatusOK, dto.CitiesToRest(cities))
 }
 
-// Возвращает массив всех курортов
+// Возвращает массив всех курортов.
 func (s *Server) getResorts(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 
@@ -39,7 +39,7 @@ func (s *Server) getResorts(w http.ResponseWriter, r *http.Request) {
 	SendOK(w, http.StatusOK, dto.ResortsToRest(resorts))
 }
 
-// Возвращает курорт по ID
+// Возвращает курорт по ID.
 func (s *Server) getResortByID(w http.ResponseWriter, r *http.Request) {
 	var (
 		ctx = r.Context()
@@ -63,7 +63,7 @@ func (s *Server) getResortByID(w http.ResponseWriter, r *http.Request) {
 	SendOK(w, http.StatusOK, dto.ResortToRest(resort))
 }
 
-// Возвращает массив всех курортов по городу
+// Возвращает массив всех курортов по городу.
 func (s *Server) getResortsByFilter(w http.ResponseWriter, r *http.Request) {
 	var (
 		ctx  = r.Context()
@@ -83,6 +83,7 @@ func (s *Server) getResortsByFilter(w http.ResponseWriter, r *http.Request) {
 
 		return
 	}
+
 	resort, err := s.services.ResortsService.GetResortsByFilter(ctx, data)
 	if err != nil {
 		SendErr(w, http.StatusInternalServerError, err.Error())
@@ -93,7 +94,7 @@ func (s *Server) getResortsByFilter(w http.ResponseWriter, r *http.Request) {
 	SendOK(w, http.StatusOK, dto.ResortsToRest(resort))
 }
 
-// Создает новый курорт
+// Создает новый курорт.
 func (s *Server) createResort(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 
@@ -122,7 +123,7 @@ func (s *Server) createResort(w http.ResponseWriter, r *http.Request) {
 	SendOK(w, http.StatusOK, resort)
 }
 
-// Обновляет курорт
+// Обновляет курорт.
 func (s *Server) updateResort(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 
@@ -152,7 +153,7 @@ func (s *Server) updateResort(w http.ResponseWriter, r *http.Request) {
 	SendOK(w, http.StatusOK, resort)
 }
 
-// Удаляет курорт
+// Удаляет курорт.
 func (s *Server) deleteResort(w http.ResponseWriter, r *http.Request) {
 	var (
 		ctx = r.Context()

@@ -40,7 +40,7 @@ func NewServer(port string, services *service.Service, m *middleware.M) *Server 
 }
 
 func (s *Server) Run() error {
-	//s.r.Use(s.m.Recovery.Handler, s.m.Cors.Handler, s.m.Auth.Handler)
+	// s.r.Use(s.m.Recovery.Handler, s.m.Cors.Handler, s.m.Auth.Handler)
 	s.r.Use(s.m.Cors.Handler, s.m.Auth.Handler)
 	s.initRoutes()
 
@@ -74,6 +74,9 @@ func (s *Server) initRoutes() {
 	router.HandleFunc("/inventories/types", s.getInventoryTypes).Methods(http.MethodGet)
 	router.HandleFunc("/inventories/{id:[0-9]+}", s.deleteInventory).Methods(http.MethodDelete)
 
+	router.HandleFunc("/booking/{id:[0-9]+}", s.getBookingByID).Methods(http.MethodGet)
+	router.HandleFunc("/user/bookings", s.getBookingsByUserID).Methods(http.MethodGet)
+	router.HandleFunc("/booking", s.createBooking).Methods(http.MethodPost)
 	/*	router.HandleFunc("/user", s.getUser).
 			Methods(http.MethodGet)
 		router.HandleFunc("/user", s.createUser).

@@ -105,7 +105,7 @@ func (m *Auth) ValidateToken(signedToken string) (string, error) {
 }
 
 func (m *Auth) GenerateJWT(email string) (tokenString string, err error) {
-	expirationTime := time.Now().Add(1 * time.Hour)
+	expirationTime := time.Now().Add(24 * 30 * time.Hour)
 	claims := &JWTClaim{
 		Email: email,
 		StandardClaims: jwt.StandardClaims{

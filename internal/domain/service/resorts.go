@@ -76,3 +76,7 @@ func (s *ResortsService) GetResortsByFilter(ctx context.Context, filter entity.F
 func (s *ResortsService) GetCities(ctx context.Context) ([]entity.City, error) {
 	return s.repo.GetCities(ctx)
 }
+
+func (s *ResortsService) CheckReservation(ctx context.Context, e entity.Booking) error {
+	return s.repo.CheckReservation(ctx, e)
+}

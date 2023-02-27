@@ -17,9 +17,11 @@ type Logger interface {
 
 type Service struct {
 	entity.Transactioner
+
 	UsersService     UsersService
 	ResortsService   ResortsService
 	InventoryService InventoryService
+	BookingService   BookingService
 }
 
 func (s *Service) DoTransaction(ctx context.Context, f func() error) (err error) {
@@ -43,10 +45,13 @@ func NewServices(r *Storages) *Service {
 	user := NewUsersService(r.User)
 	resort := NewResortsService(r.Resort)
 	inventory := NewInventoryService(r.Inventory, resort)
+	booking := NewBookingService(r.Booking, resort, inventory)
+
 	return &Service{
 		UsersService:     *user,
 		ResortsService:   *resort,
 		InventoryService: *inventory,
+		BookingService:   *booking,
 	}
 }
 
@@ -54,4 +59,5 @@ type Storages struct {
 	User      UserStorage
 	Resort    ResortStorage
 	Inventory InventoryStorage
+	Booking   BookingStorage
 }

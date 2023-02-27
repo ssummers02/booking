@@ -22,6 +22,8 @@ type ResortStorage interface {
 	UpdateResort(ctx context.Context, e entity.Resort) (entity.Resort, error)
 	GetResortsByFilter(ctx context.Context, filter entity.Filter) ([]entity.Resort, error)
 	GetCities(ctx context.Context) ([]entity.City, error)
+
+	CheckReservation(ctx context.Context, e entity.Booking) error
 }
 
 type InventoryStorage interface {
@@ -33,4 +35,13 @@ type InventoryStorage interface {
 	DeleteInventory(ctx context.Context, id int64) error
 	UpdateInventory(ctx context.Context, e entity.Inventory) (entity.Inventory, error)
 	GetInventoriesTypes(ctx context.Context) ([]entity.InventoryType, error)
+}
+
+type BookingStorage interface {
+	entity.Transactioner
+
+	GetBookingByID(ctx context.Context, id int64) (entity.Booking, error)
+	GetBookingsByUserID(ctx context.Context, userID int64) ([]entity.Booking, error)
+	CreateBooking(ctx context.Context, booking entity.Booking) (entity.Booking, error)
+	GetBookingByResort(ctx context.Context, resortID int64) (entity.Booking, error)
 }

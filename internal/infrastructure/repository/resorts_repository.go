@@ -124,9 +124,11 @@ func setFilter(stmt *dbr.SelectStmt, filter entity.Filter) {
 	if filter.CityID != nil {
 		stmt.Where("city_id = ?", filter.CityID)
 	}
+
 	if filter.TypeID != nil {
 		stmt.Where("inventory.type_id = ?", filter.TypeID)
 	}
+
 	if filter.StartDate != nil {
 		startDate, _ := time.Parse("2006-01-02", *filter.StartDate)
 		endDay := startDate.AddDate(0, 0, int(*filter.Duration))
@@ -142,4 +144,18 @@ func setFilter(stmt *dbr.SelectStmt, filter entity.Filter) {
 			))
 		stmt.Having("COUNT(inventory.id) > 0")
 	}
+}
+
+// check that the reservation is not included in other reservations.
+func (r *ResortRepository) CheckReservation(ctx context.Context, e entity.Booking) error {
+	return r.BeginTx(ctx, func(tx *dbr.Tx) error {
+		_, err := tx.Select("bookings.*").
+			From("bookings").
+			Where("inventory_id = ?", e.InventoryID).
+			Where("start_date < ?", e.EndDate.Format("2006-01-02")).
+			Where("end_date > ?", e.StartDate.Format("2006-01-02")).
+			Load(&dbmodel.Booking{})
+
+		return err
+	})
 }

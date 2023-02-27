@@ -6,6 +6,7 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
+	"log"
 	"net/http"
 	"time"
 
@@ -61,6 +62,7 @@ func (m *Auth) Handler(next http.Handler) http.Handler {
 				}
 
 				r = r.WithContext(context.WithValue(r.Context(), "user", user))
+				log.Println("user", user)
 			}
 
 			next.ServeHTTP(w, r)
@@ -103,7 +105,7 @@ func (m *Auth) ValidateToken(signedToken string) (string, error) {
 }
 
 func (m *Auth) GenerateJWT(email string) (tokenString string, err error) {
-	expirationTime := time.Now().Add(1 * time.Hour)
+	expirationTime := time.Now().Add(24 * 30 * time.Hour)
 	claims := &JWTClaim{
 		Email: email,
 		StandardClaims: jwt.StandardClaims{

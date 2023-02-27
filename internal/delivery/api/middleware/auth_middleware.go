@@ -6,6 +6,7 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
+	"log"
 	"net/http"
 	"time"
 
@@ -61,6 +62,7 @@ func (m *Auth) Handler(next http.Handler) http.Handler {
 				}
 
 				r = r.WithContext(context.WithValue(r.Context(), "user", user))
+				log.Println("user", user)
 			}
 
 			next.ServeHTTP(w, r)

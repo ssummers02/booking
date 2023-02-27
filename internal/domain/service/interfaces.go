@@ -43,4 +43,5 @@ type BookingStorage interface {
 	GetBookingByID(ctx context.Context, id int64) (entity.Booking, error)
 	GetBookingsByUserID(ctx context.Context, userID int64) ([]entity.Booking, error)
 	CreateBooking(ctx context.Context, booking entity.Booking) (entity.Booking, error)
+	GetBookingByResort(ctx context.Context, resortID int64) (entity.Booking, error)
 }

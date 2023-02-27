@@ -55,3 +55,23 @@ func (s *BookingService) CreateBooking(ctx context.Context, booking entity.Booki
 
 	return s.repo.CreateBooking(ctx, booking)
 }
+
+func (s *BookingService) GetBookingByResortID(ctx context.Context, resortID int64) (entity.Booking, error) {
+	user := ctx.Value("user").(entity.User)
+
+	resort, err := s.ResortsService.GetResortByID(ctx, resortID)
+	if err != nil {
+		return entity.Booking{}, err
+	}
+
+	if resort.OwnerID != user.ID {
+		return entity.Booking{}, errors.New("user is not owner")
+	}
+
+	booking, err := s.repo.GetBookingByResort(ctx, resortID)
+	if err != nil {
+		return entity.Booking{}, err
+	}
+
+	return booking, nil
+}

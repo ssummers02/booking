@@ -76,3 +76,26 @@ func (s *Server) createBooking(w http.ResponseWriter, r *http.Request) {
 
 	SendOK(w, http.StatusOK, dto.BookingToRest(booking))
 }
+
+func (s *Server) getBookingByResortID(w http.ResponseWriter, r *http.Request) {
+	var (
+		ctx = r.Context()
+		id  = mux.Vars(r)["id"]
+	)
+
+	parseID, err := strconv.ParseInt(id, 10, 64)
+	if err != nil {
+		SendErr(w, http.StatusInternalServerError, err.Error())
+
+		return
+	}
+
+	resort, err := s.services.BookingService.GetBookingByResortID(ctx, parseID)
+	if err != nil {
+		SendErr(w, http.StatusInternalServerError, err.Error())
+
+		return
+	}
+
+	SendOK(w, http.StatusOK, dto.BookingToRest(resort))
+}

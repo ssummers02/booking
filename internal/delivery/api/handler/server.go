@@ -76,6 +76,8 @@ func (s *Server) initRoutes() {
 
 	router.HandleFunc("/booking/{id:[0-9]+}", s.getBookingByID).Methods(http.MethodGet)
 	router.HandleFunc("/user/bookings", s.getBookingsByUserID).Methods(http.MethodGet)
+	router.HandleFunc("/resorts/bookings/{id:[0-9]+}", s.getBookingByResortID).Methods(http.MethodGet)
+
 	router.HandleFunc("/booking", s.createBooking).Methods(http.MethodPost)
 	/*	router.HandleFunc("/user", s.getUser).
 			Methods(http.MethodGet)

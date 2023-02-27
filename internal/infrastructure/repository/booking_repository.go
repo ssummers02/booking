@@ -1,10 +1,12 @@
 package repository
 
 import (
+	"booking/internal/domain"
 	"booking/internal/domain/dto"
 	"booking/internal/domain/entity"
 	"booking/internal/infrastructure/dbmodel"
 	"context"
+	"errors"
 
 	"github.com/gocraft/dbr/v2"
 )
@@ -61,4 +63,25 @@ func (r *BookingRepository) CreateBooking(ctx context.Context, booking entity.Bo
 	})
 
 	return dto.BookingFromDB(dbBooking), err
+}
+
+func (r *BookingRepository) GetBookingByResort(ctx context.Context, resortID int64) (entity.Booking, error) {
+	var booking dbmodel.Booking
+
+	err := r.BeginTx(ctx, func(tx *dbr.Tx) error {
+		err := tx.Select("*").
+			From("bookings").
+			LeftJoin("inventory", "bookings.inventory_id = inventory.id").
+			LeftJoin("resorts", "inventory.resort_id = resorts.id").
+			Where("resorts.id = ?", resortID).
+			LoadOne(&booking)
+
+		return err
+	})
+
+	if errors.Is(err, domain.ErrNotFound) {
+		return entity.Booking{}, nil
+	}
+
+	return dto.BookingFromDB(booking), err
 }

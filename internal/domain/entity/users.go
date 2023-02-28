@@ -47,9 +47,6 @@ func (user *User) CheckPassword(providedPassword string) error {
 
 	return nil
 }
-func (user *User) IsAuthorized() bool {
-	return user.ID != 0
-}
 
 func (user *User) IsOwnerRole() bool {
 	return user.RoleID == owner

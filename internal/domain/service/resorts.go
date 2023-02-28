@@ -34,8 +34,8 @@ func (s *ResortsService) CreateResort(ctx context.Context, e entity.Resort) (ent
 }
 
 func (s *ResortsService) DeleteResort(ctx context.Context, id int64) error {
-	user := ctx.Value("user").(entity.User)
-	if !user.IsAuthorized() {
+	user, ok := ctx.Value("user").(entity.User)
+	if !ok {
 		return domain.NewError(domain.ErrCodeForbidden, "user is not role owner")
 	}
 
@@ -52,8 +52,8 @@ func (s *ResortsService) DeleteResort(ctx context.Context, id int64) error {
 }
 
 func (s *ResortsService) UpdateResort(ctx context.Context, e entity.Resort) (entity.Resort, error) {
-	user := ctx.Value("user").(entity.User)
-	if !user.IsAuthorized() {
+	user, ok := ctx.Value("user").(entity.User)
+	if !ok {
 		return entity.Resort{}, domain.NewError(domain.ErrCodeForbidden, "user is not owner")
 	}
 

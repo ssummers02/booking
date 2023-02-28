@@ -99,3 +99,18 @@ func (s *Server) getBookingByResortID(w http.ResponseWriter, r *http.Request) {
 
 	SendOK(w, http.StatusOK, dto.BookingToRest(resort))
 }
+
+func (s *Server) getBookingByOwner(w http.ResponseWriter, r *http.Request) {
+	var (
+		ctx = r.Context()
+	)
+
+	resort, err := s.services.BookingService.GetBookingByOwner(ctx)
+	if err != nil {
+		SendErr(w, http.StatusInternalServerError, err.Error())
+
+		return
+	}
+
+	SendOK(w, http.StatusOK, dto.BookingToRest(resort))
+}

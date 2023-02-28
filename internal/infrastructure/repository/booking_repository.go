@@ -85,3 +85,24 @@ func (r *BookingRepository) GetBookingByResort(ctx context.Context, resortID int
 
 	return dto.BookingFromDB(booking), err
 }
+
+func (r *BookingRepository) GetBookingByOwner(ctx context.Context, ownerID int64) (entity.Booking, error) {
+	var booking dbmodel.Booking
+
+	err := r.BeginTx(ctx, func(tx *dbr.Tx) error {
+		err := tx.Select("*").
+			From("bookings").
+			LeftJoin("inventory", "bookings.inventory_id = inventory.id").
+			LeftJoin("resorts", "inventory.resort_id = resorts.id").
+			Where("owner_id.id = ?", ownerID).
+			LoadOne(&booking)
+
+		return err
+	})
+
+	if errors.Is(err, domain.ErrNotFound) {
+		return entity.Booking{}, nil
+	}
+
+	return dto.BookingFromDB(booking), err
+}

@@ -1,6 +1,7 @@
 package service
 
 import (
+	"booking/internal/domain"
 	"booking/internal/domain/entity"
 	"context"
 	"errors"
@@ -57,7 +58,10 @@ func (s *BookingService) CreateBooking(ctx context.Context, booking entity.Booki
 }
 
 func (s *BookingService) GetBookingByResortID(ctx context.Context, resortID int64) (entity.Booking, error) {
-	user := ctx.Value("user").(entity.User)
+	user, ok := ctx.Value("user").(entity.User)
+	if !ok {
+		return entity.Booking{}, domain.NewError(domain.ErrCodeForbidden, "user is not role owner")
+	}
 
 	resort, err := s.ResortsService.GetResortByID(ctx, resortID)
 	if err != nil {
@@ -69,6 +73,19 @@ func (s *BookingService) GetBookingByResortID(ctx context.Context, resortID int6
 	}
 
 	booking, err := s.repo.GetBookingByResort(ctx, resortID)
+	if err != nil {
+		return entity.Booking{}, err
+	}
+
+	return booking, nil
+}
+func (s *BookingService) GetBookingByOwner(ctx context.Context) (entity.Booking, error) {
+	user, ok := ctx.Value("user").(entity.User)
+	if !ok {
+		return entity.Booking{}, domain.NewError(domain.ErrCodeNotAuthorized, "user is not authorized")
+	}
+
+	booking, err := s.repo.GetBookingByOwner(ctx, user.ID)
 	if err != nil {
 		return entity.Booking{}, err
 	}

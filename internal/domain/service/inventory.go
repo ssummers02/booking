@@ -46,8 +46,8 @@ func (s *InventoryService) CreateInventory(ctx context.Context, e entity.Invento
 }
 
 func (s *InventoryService) DeleteInventory(ctx context.Context, id int64) error {
-	user := ctx.Value("user").(entity.User)
-	if !user.IsAuthorized() {
+	user, ok := ctx.Value("user").(entity.User)
+	if !ok {
 		return domain.NewError(domain.ErrCodeForbidden, "user is not role owner")
 	}
 
@@ -69,9 +69,9 @@ func (s *InventoryService) DeleteInventory(ctx context.Context, id int64) error 
 }
 
 func (s *InventoryService) UpdateInventory(ctx context.Context, e entity.Inventory) (entity.Inventory, error) {
-	user := ctx.Value("user").(entity.User)
-	if !user.IsAuthorized() {
-		return entity.Inventory{}, domain.NewError(domain.ErrCodeForbidden, "user is not owner")
+	user, ok := ctx.Value("user").(entity.User)
+	if !ok {
+		return entity.Inventory{}, domain.NewError(domain.ErrCodeForbidden, "user is not role owner")
 	}
 
 	inventory, err := s.GetInventoryByID(ctx, e.ID)

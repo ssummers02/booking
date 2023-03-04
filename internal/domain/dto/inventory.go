@@ -97,3 +97,12 @@ func InventoryTypesToRest(e []entity.InventoryType) []restmodel.InventoryType {
 
 	return inventoryTypes
 }
+
+func InventoryFilterFromRest(r restmodel.InventoryFilter) entity.InventoryFilter {
+	return entity.InventoryFilter{
+		ResortID:  r.ResortID,
+		TypeID:    r.TypeID,
+		StartDate: r.StartDate,
+		Duration:  r.Duration,
+	}
+}

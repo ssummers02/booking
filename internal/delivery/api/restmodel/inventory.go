@@ -12,3 +12,10 @@ type InventoryType struct {
 	ID   int64  `json:"id"`
 	Name string `json:"name"`
 }
+
+type InventoryFilter struct {
+	ResortID  int64   `json:"resort_id"`
+	TypeID    *int64  `json:"type_id"`
+	StartDate *string `json:"start_date"`
+	Duration  *int64  `json:"duration"`
+}

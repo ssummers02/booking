@@ -176,3 +176,27 @@ func (s *Server) getInventoryByResort(w http.ResponseWriter, r *http.Request) {
 
 	SendOK(w, http.StatusOK, dto.InventorysToRest(inventory))
 }
+
+func (s *Server) getInventoriesByFilters(w http.ResponseWriter, r *http.Request) {
+	var (
+		ctx = r.Context()
+	)
+
+	var data restmodel.InventoryFilter
+
+	err := json.NewDecoder(r.Body).Decode(&data)
+	if err != nil {
+		SendErr(w, http.StatusBadRequest, "invalid json")
+
+		return
+	}
+
+	inventory, err := s.services.InventoryService.GetInventoriesByFilters(ctx, dto.InventoryFilterFromRest(data))
+	if err != nil {
+		SendErr(w, http.StatusInternalServerError, err.Error())
+
+		return
+	}
+
+	SendOK(w, http.StatusOK, dto.InventorysToRest(inventory))
+}

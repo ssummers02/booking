@@ -12,3 +12,10 @@ type InventoryType struct {
 	ID   int64
 	Name string
 }
+
+type InventoryFilter struct {
+	ResortID  int64
+	TypeID    *int64
+	StartDate *string
+	Duration  *int64
+}

@@ -94,3 +94,7 @@ func (s *InventoryService) UpdateInventory(ctx context.Context, e entity.Invento
 func (s *InventoryService) GetInventoriesTypes(ctx context.Context) ([]entity.InventoryType, error) {
 	return s.repo.GetInventoriesTypes(ctx)
 }
+
+func (s *InventoryService) GetInventoriesByFilters(ctx context.Context, filters entity.InventoryFilter) ([]entity.Inventory, error) {
+	return s.repo.GetInventoriesByFilters(ctx, filters)
+}

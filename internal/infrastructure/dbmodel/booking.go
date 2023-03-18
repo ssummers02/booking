@@ -9,6 +9,6 @@ type Booking struct {
 	Inventory   Inventory `db:"inventory"`
 	Resort      Resort    `db:"resort"`
 	TotalPrice  float64   `db:"total_price"`
-	StartDate   time.Time `db:"start_date"`
-	EndDate     time.Time `db:"end_date"`
+	StartTime   time.Time `db:"start_time"`
+	EndTime     time.Time `db:"end_time"`
 }

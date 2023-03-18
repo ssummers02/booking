@@ -1,5 +1,7 @@
 package entity
 
+import "time"
+
 type Inventory struct {
 	ID       int64
 	TypeID   int64
@@ -16,6 +18,6 @@ type InventoryType struct {
 type InventoryFilter struct {
 	ResortID  int64
 	TypeID    *int64
-	StartDate *string
-	Duration  *int64
+	StartTime *time.Time
+	EndTime   *time.Time
 }

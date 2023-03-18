@@ -240,8 +240,8 @@ CREATE TABLE bookings
     id           BIGSERIAL   NOT NULL PRIMARY KEY,
     user_id      BIGINT      NOT NULL REFERENCES users (id),
     inventory_id BIGINT      NOT NULL REFERENCES inventory (id),
-    start_date   DATE        NOT NULL,
-    end_date     DATE        NOT NULL,
+    start_time   TIMESTAMPTZ        NOT NULL,
+    end_time     TIMESTAMPTZ        NOT NULL,
     created_at   TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     updated_at   TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );

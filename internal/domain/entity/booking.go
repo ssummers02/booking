@@ -10,7 +10,6 @@ type Booking struct {
 	Resort      Resort
 	TotalPrice  float64
 
-	StartDate time.Time
-	EndDate   time.Time
-	Duration  *int64
+	StartTime time.Time
+	EndTime   time.Time
 }

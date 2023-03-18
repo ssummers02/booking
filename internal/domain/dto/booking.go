@@ -14,8 +14,8 @@ func BookingFromDB(booking dbmodel.Booking) entity.Booking {
 		Inventory:   InventoryFromDB(booking.Inventory),
 		Resort:      ResortFromDB(booking.Resort),
 		TotalPrice:  booking.TotalPrice,
-		StartDate:   booking.StartDate,
-		EndDate:     booking.EndDate,
+		StartTime:   booking.StartTime,
+		EndTime:     booking.EndTime,
 	}
 }
 
@@ -38,8 +38,8 @@ func BookingToRest(booking entity.Booking) restmodel.Booking {
 		Resort:      ResortToRest(booking.Resort),
 		TotalPrice:  booking.TotalPrice,
 
-		StartDate: booking.StartDate,
-		EndDate:   booking.EndDate,
+		StartTime: booking.StartTime,
+		EndTime:   booking.EndTime,
 	}
 }
 
@@ -58,18 +58,17 @@ func BookingToDB(booking entity.Booking) dbmodel.Booking {
 		UserID:      booking.UserID,
 		InventoryID: booking.InventoryID,
 		TotalPrice:  booking.TotalPrice,
-		StartDate:   booking.StartDate,
-		EndDate:     booking.EndDate,
+		StartTime:   booking.StartTime,
+		EndTime:     booking.EndTime,
 	}
 }
 
 func BookingCreateEntity(booking restmodel.Booking, userID int64) entity.Booking {
-	endDay := booking.StartDate.AddDate(0, 0, int(*booking.Duration))
 
 	return entity.Booking{
 		UserID:      userID,
 		InventoryID: booking.InventoryID,
-		StartDate:   booking.StartDate,
-		EndDate:     endDay,
+		StartTime:   booking.StartTime,
+		EndTime:     booking.EndTime,
 	}
 }

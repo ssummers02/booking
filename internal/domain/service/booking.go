@@ -52,9 +52,13 @@ func (s *BookingService) CreateBooking(ctx context.Context, booking entity.Booki
 		return entity.Booking{}, err
 	}
 
-	booking.TotalPrice = float64(inventory.Price) * booking.EndDate.Sub(booking.StartDate).Hours() / 24
+	booking.TotalPrice = float64(inventory.Price) * booking.EndTime.Sub(booking.StartTime).Hours()
 
-	return s.repo.CreateBooking(ctx, booking)
+	createBooking, err := s.repo.CreateBooking(ctx, booking)
+	if err != nil {
+		return entity.Booking{}, err
+	}
+	return s.GetBookingByID(ctx, createBooking.ID)
 }
 
 func (s *BookingService) GetBookingByResortID(ctx context.Context, resortID int64) (entity.Booking, error) {

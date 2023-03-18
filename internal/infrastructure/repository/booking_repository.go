@@ -57,7 +57,7 @@ func (r *BookingRepository) CreateBooking(ctx context.Context, booking entity.Bo
 	err := r.BeginTx(ctx, func(tx *dbr.Tx) error {
 		return tx.InsertInto("bookings").
 			Returning("id").
-			Columns("user_id", "inventory_id", "total_price", "start_date", "end_date").
+			Columns("user_id", "inventory_id", "total_price", "start_time", "end_time").
 			Record(&dbBooking).
 			Load(&dbBooking.ID)
 	})

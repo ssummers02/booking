@@ -1,5 +1,7 @@
 package restmodel
 
+import "time"
+
 type Inventory struct {
 	ID       int64  `json:"id"`
 	TypeID   int64  `json:"type_id" validate:"required"`
@@ -14,8 +16,8 @@ type InventoryType struct {
 }
 
 type InventoryFilter struct {
-	ResortID  int64   `json:"resort_id"`
-	TypeID    *int64  `json:"type_id"`
-	StartDate *string `json:"start_date"`
-	Duration  *int64  `json:"duration"`
+	ResortID  int64      `json:"resort_id"`
+	TypeID    *int64     `json:"type_id"`
+	StartTime *time.Time `json:"start_time"`
+	EndTime   *time.Time `json:"end_time"`
 }

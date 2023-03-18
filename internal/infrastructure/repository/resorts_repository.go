@@ -5,8 +5,6 @@ import (
 	"booking/internal/domain/entity"
 	"booking/internal/infrastructure/dbmodel"
 	"context"
-	"log"
-	"time"
 
 	"github.com/gocraft/dbr/v2"
 )
@@ -129,20 +127,19 @@ func setFilter(stmt *dbr.SelectStmt, filter entity.Filter) {
 		stmt.Where("inventory.type_id = ?", filter.TypeID)
 	}
 
-	if filter.StartDate != nil {
-		startDate, _ := time.Parse("2006-01-02", *filter.StartDate)
-		endDay := startDate.AddDate(0, 0, int(*filter.Duration))
-		log.Printf("start date: %s, end date: %s", startDate.Format("2006-01-02"), endDay.Format("2006-01-02"))
+	if filter.StartTime != nil && filter.EndTime != nil {
 		stmt.LeftJoin("bookings", dbr.And(
 			dbr.Expr("bookings.inventory_id = inventory.id"),
 		))
 		stmt.Where(
 			dbr.Or(
 				dbr.Expr("bookings.id IS NULL"),
-				dbr.Expr("bookings.start_date > ?", startDate.Format("2006-01-02")),
-				dbr.Expr("bookings.end_date < ?", endDay.Format("2006-01-02")),
+				dbr.Expr("bookings.start_time > ?", filter.EndTime.Format("2006-01-02 15:04:05")),
+				dbr.Expr("bookings.end_time < ?", filter.StartTime.Format("2006-01-02 15:04:05")),
 			))
 		stmt.Having("COUNT(inventory.id) > 0")
+	} else {
+		stmt.Where("1 = 1") // Placeholder condition to prevent SQL syntax errors
 	}
 }
 
@@ -152,8 +149,8 @@ func (r *ResortRepository) CheckReservation(ctx context.Context, e entity.Bookin
 		_, err := tx.Select("bookings.*").
 			From("bookings").
 			Where("inventory_id = ?", e.InventoryID).
-			Where("start_date < ?", e.EndDate.Format("2006-01-02")).
-			Where("end_date > ?", e.StartDate.Format("2006-01-02")).
+			Where("start_time < ?", e.EndTime.Format("2006-01-02 15:04:05")).
+			Where("end_time > ?", e.StartTime.Format("2006-01-02 15:04:05")).
 			Load(&dbmodel.Booking{})
 
 		return err

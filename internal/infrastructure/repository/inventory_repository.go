@@ -5,8 +5,6 @@ import (
 	"booking/internal/domain/entity"
 	"booking/internal/infrastructure/dbmodel"
 	"context"
-	"log"
-	"time"
 
 	"github.com/gocraft/dbr/v2"
 )
@@ -128,19 +126,19 @@ func setInventoryFilter(stmt *dbr.SelectStmt, filter entity.InventoryFilter) {
 		stmt.Where("inventory.type_id = ?", filter.TypeID)
 	}
 
-	if filter.StartDate != nil {
-		startDate, _ := time.Parse("2006-01-02", *filter.StartDate)
-		endDay := startDate.AddDate(0, 0, int(*filter.Duration))
-		log.Printf("start date: %s, end date: %s", startDate.Format("2006-01-02"), endDay.Format("2006-01-02"))
+	if filter.StartTime != nil && filter.EndTime != nil {
 		stmt.LeftJoin("bookings", dbr.And(
 			dbr.Expr("bookings.inventory_id = inventory.id"),
 		))
 		stmt.Where(
 			dbr.Or(
 				dbr.Expr("bookings.id IS NULL"),
-				dbr.Expr("bookings.start_date > ?", startDate.Format("2006-01-02")),
-				dbr.Expr("bookings.end_date < ?", endDay.Format("2006-01-02")),
+				dbr.Expr("bookings.start_time > ?", filter.EndTime.Format("2006-01-02 15:04:05")),
+				dbr.Expr("bookings.end_time < ?", filter.StartTime.Format("2006-01-02 15:04:05")),
 			))
 		stmt.Having("COUNT(inventory.id) > 0")
+	} else {
+		stmt.Where("1 = 1") // Placeholder condition to prevent SQL syntax errors
 	}
+
 }

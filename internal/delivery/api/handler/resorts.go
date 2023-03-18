@@ -39,6 +39,20 @@ func (s *Server) getResorts(w http.ResponseWriter, r *http.Request) {
 	SendOK(w, http.StatusOK, dto.ResortsToRest(resorts))
 }
 
+// Возвращает массив всех курортов по владельцу.
+func (s *Server) getMyResorts(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+
+	resorts, err := s.services.ResortsService.GetResortByOwnerID(ctx)
+	if err != nil {
+		SendErr(w, http.StatusInternalServerError, err.Error())
+
+		return
+	}
+
+	SendOK(w, http.StatusOK, dto.ResortsToRest(resorts))
+}
+
 // Возвращает курорт по ID.
 func (s *Server) getResortByID(w http.ResponseWriter, r *http.Request) {
 	var (

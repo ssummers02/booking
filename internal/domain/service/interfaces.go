@@ -17,6 +17,7 @@ type ResortStorage interface {
 
 	GetResorts(ctx context.Context) ([]entity.Resort, error)
 	GetResortByID(ctx context.Context, id int64) (entity.Resort, error)
+	GetResortByOwnerID(ctx context.Context, id int64) ([]entity.Resort, error)
 	CreateResort(ctx context.Context, e entity.Resort) (entity.Resort, error)
 	DeleteResort(ctx context.Context, id int64) error
 	UpdateResort(ctx context.Context, e entity.Resort) (entity.Resort, error)
@@ -44,6 +45,6 @@ type BookingStorage interface {
 	GetBookingByID(ctx context.Context, id int64) (entity.Booking, error)
 	GetBookingsByUserID(ctx context.Context, userID int64) ([]entity.Booking, error)
 	CreateBooking(ctx context.Context, booking entity.Booking) (entity.Booking, error)
-	GetBookingByResort(ctx context.Context, resortID int64) (entity.Booking, error)
-	GetBookingByOwner(ctx context.Context, ownerID int64) (entity.Booking, error)
+	GetBookingsByResort(ctx context.Context, resortID int64) ([]entity.Booking, error)
+	GetBookingsByOwner(ctx context.Context, ownerID int64) ([]entity.Booking, error)
 }

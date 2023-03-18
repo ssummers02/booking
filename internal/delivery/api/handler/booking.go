@@ -97,7 +97,7 @@ func (s *Server) getBookingByResortID(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	SendOK(w, http.StatusOK, dto.BookingToRest(resort))
+	SendOK(w, http.StatusOK, dto.BookingsToRest(resort))
 }
 
 func (s *Server) getBookingByOwner(w http.ResponseWriter, r *http.Request) {
@@ -112,5 +112,5 @@ func (s *Server) getBookingByOwner(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	SendOK(w, http.StatusOK, dto.BookingToRest(resort))
+	SendOK(w, http.StatusOK, dto.BookingsToRest(resort))
 }

@@ -43,6 +43,19 @@ func (r *ResortRepository) GetResortByID(ctx context.Context, id int64) (entity.
 
 	return dto.ResortFromDB(resort), err
 }
+func (r *ResortRepository) GetResortByOwnerID(ctx context.Context, id int64) ([]entity.Resort, error) {
+	var resort []dbmodel.Resort
+
+	err := r.BeginTx(ctx, func(tx *dbr.Tx) error {
+		_, err := tx.Select("*").
+			From("resorts").
+			Where("owner_id = ?", id).
+			Load(&resort)
+		return err
+	})
+
+	return dto.ResortsFromDB(resort), err
+}
 
 func (r *ResortRepository) CreateResort(ctx context.Context, e entity.Resort) (entity.Resort, error) {
 	resort := dto.ResortToDB(e)

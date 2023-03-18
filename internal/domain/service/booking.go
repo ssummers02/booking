@@ -61,37 +61,37 @@ func (s *BookingService) CreateBooking(ctx context.Context, booking entity.Booki
 	return s.GetBookingByID(ctx, createBooking.ID)
 }
 
-func (s *BookingService) GetBookingByResortID(ctx context.Context, resortID int64) (entity.Booking, error) {
+func (s *BookingService) GetBookingByResortID(ctx context.Context, resortID int64) ([]entity.Booking, error) {
 	user, ok := ctx.Value("user").(entity.User)
 	if !ok {
-		return entity.Booking{}, domain.NewError(domain.ErrCodeForbidden, "user is not role owner")
+		return []entity.Booking{}, domain.NewError(domain.ErrCodeForbidden, "user is not role owner")
 	}
 
 	resort, err := s.ResortsService.GetResortByID(ctx, resortID)
 	if err != nil {
-		return entity.Booking{}, err
+		return []entity.Booking{}, err
 	}
 
 	if resort.OwnerID != user.ID {
-		return entity.Booking{}, errors.New("user is not owner")
+		return []entity.Booking{}, errors.New("user is not owner")
 	}
 
-	booking, err := s.repo.GetBookingByResort(ctx, resortID)
+	booking, err := s.repo.GetBookingsByResort(ctx, resortID)
 	if err != nil {
-		return entity.Booking{}, err
+		return []entity.Booking{}, err
 	}
 
 	return booking, nil
 }
-func (s *BookingService) GetBookingByOwner(ctx context.Context) (entity.Booking, error) {
+func (s *BookingService) GetBookingByOwner(ctx context.Context) ([]entity.Booking, error) {
 	user, ok := ctx.Value("user").(entity.User)
 	if !ok {
-		return entity.Booking{}, domain.NewError(domain.ErrCodeNotAuthorized, "user is not authorized")
+		return []entity.Booking{}, domain.NewError(domain.ErrCodeNotAuthorized, "user is not authorized")
 	}
 
-	booking, err := s.repo.GetBookingByOwner(ctx, user.ID)
+	booking, err := s.repo.GetBookingsByOwner(ctx, user.ID)
 	if err != nil {
-		return entity.Booking{}, err
+		return []entity.Booking{}, err
 	}
 
 	return booking, nil

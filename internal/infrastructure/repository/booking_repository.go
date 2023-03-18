@@ -38,11 +38,12 @@ func (r *BookingRepository) GetBookingsByUserID(ctx context.Context, userID int6
 	var bookings []dbmodel.Booking
 
 	err := r.BeginTx(ctx, func(tx *dbr.Tx) error {
-		_, err := tx.Select("*").
+		_, err := tx.Select("bookings.*, inventory.type_id, inventory.resort_id,inventory.price,inventory.photo, resorts.name, resorts.city_id, resorts.owner_id, resorts.description, resorts.address").
 			From("bookings").
 			LeftJoin("inventory", "bookings.inventory_id = inventory.id").
 			LeftJoin("resorts", "inventory.resort_id = resorts.id").
 			Where("bookings.user_id = ?", userID).
+			OrderDesc("bookings.id").
 			Load(&bookings)
 
 		return err
@@ -65,44 +66,44 @@ func (r *BookingRepository) CreateBooking(ctx context.Context, booking entity.Bo
 	return dto.BookingFromDB(dbBooking), err
 }
 
-func (r *BookingRepository) GetBookingByResort(ctx context.Context, resortID int64) (entity.Booking, error) {
-	var booking dbmodel.Booking
+func (r *BookingRepository) GetBookingsByResort(ctx context.Context, resortID int64) ([]entity.Booking, error) {
+	var booking []dbmodel.Booking
 
 	err := r.BeginTx(ctx, func(tx *dbr.Tx) error {
-		err := tx.Select("*").
+		_, err := tx.Select("bookings.*, inventory.type_id, inventory.resort_id,inventory.price,inventory.photo, resorts.name, resorts.city_id, resorts.owner_id, resorts.description, resorts.address").
 			From("bookings").
 			LeftJoin("inventory", "bookings.inventory_id = inventory.id").
 			LeftJoin("resorts", "inventory.resort_id = resorts.id").
 			Where("resorts.id = ?", resortID).
-			LoadOne(&booking)
+			Load(&booking)
 
 		return err
 	})
 
 	if errors.Is(err, domain.ErrNotFound) {
-		return entity.Booking{}, nil
+		return []entity.Booking{}, nil
 	}
 
-	return dto.BookingFromDB(booking), err
+	return dto.BookingsFromDB(booking), err
 }
 
-func (r *BookingRepository) GetBookingByOwner(ctx context.Context, ownerID int64) (entity.Booking, error) {
-	var booking dbmodel.Booking
+func (r *BookingRepository) GetBookingsByOwner(ctx context.Context, ownerID int64) ([]entity.Booking, error) {
+	var booking []dbmodel.Booking
 
 	err := r.BeginTx(ctx, func(tx *dbr.Tx) error {
-		err := tx.Select("*").
+		_, err := tx.Select("bookings.*, inventory.type_id, inventory.resort_id,inventory.price,inventory.photo, resorts.name, resorts.city_id, resorts.owner_id, resorts.description, resorts.address").
 			From("bookings").
 			LeftJoin("inventory", "bookings.inventory_id = inventory.id").
 			LeftJoin("resorts", "inventory.resort_id = resorts.id").
-			Where("owner_id.id = ?", ownerID).
-			LoadOne(&booking)
+			Where("resorts.owner_id = ?", ownerID).
+			Load(&booking)
 
 		return err
 	})
 
 	if errors.Is(err, domain.ErrNotFound) {
-		return entity.Booking{}, nil
+		return []entity.Booking{}, nil
 	}
 
-	return dto.BookingFromDB(booking), err
+	return dto.BookingsFromDB(booking), err
 }

@@ -21,9 +21,20 @@ func (s *ResortsService) GetResorts(ctx context.Context) ([]entity.Resort, error
 func (s *ResortsService) GetResortByID(ctx context.Context, id int64) (entity.Resort, error) {
 	return s.repo.GetResortByID(ctx, id)
 }
+func (s *ResortsService) GetResortByOwnerID(ctx context.Context) ([]entity.Resort, error) {
+	user, ok := ctx.Value("user").(entity.User)
+	if !ok {
+		return []entity.Resort{}, domain.NewError(domain.ErrCodeForbidden, "not authorized")
+	}
 
+	return s.repo.GetResortByOwnerID(ctx, user.ID)
+}
 func (s *ResortsService) CreateResort(ctx context.Context, e entity.Resort) (entity.Resort, error) {
-	user := ctx.Value("user").(entity.User)
+	user, ok := ctx.Value("user").(entity.User)
+	if !ok {
+		return entity.Resort{}, domain.NewError(domain.ErrCodeForbidden, "not authorized")
+	}
+
 	if !user.IsOwnerRole() {
 		return entity.Resort{}, domain.NewError(domain.ErrCodeForbidden, "user is not owner")
 	}
@@ -36,7 +47,7 @@ func (s *ResortsService) CreateResort(ctx context.Context, e entity.Resort) (ent
 func (s *ResortsService) DeleteResort(ctx context.Context, id int64) error {
 	user, ok := ctx.Value("user").(entity.User)
 	if !ok {
-		return domain.NewError(domain.ErrCodeForbidden, "user is not role owner")
+		return domain.NewError(domain.ErrCodeForbidden, "not authorized")
 	}
 
 	resort, err := s.GetResortByID(ctx, id)

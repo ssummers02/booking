@@ -54,6 +54,11 @@ func (s *Server) Shutdown(ctx context.Context) error {
 func (s *Server) initRoutes() {
 	router := s.r.PathPrefix("/api").
 		Subrouter()
+	router.HandleFunc("/ping", func(writer http.ResponseWriter, request *http.Request) {
+		writer.WriteHeader(http.StatusOK)
+		_, _ = writer.Write([]byte("ok"))
+	})
+
 	router.HandleFunc("/user/register", s.register).Methods(http.MethodPost)
 	router.HandleFunc("/user/login", s.signIn).Methods(http.MethodPost)
 

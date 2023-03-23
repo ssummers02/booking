@@ -74,7 +74,7 @@ func (m *Auth) Handler(next http.Handler) http.Handler {
 var jwtKey = []byte("supersecretkey") // env of file
 type JWTClaim struct {
 	Email string `json:"email"`
-	jwt.StandardClaims
+	jwt.RegisteredClaims
 }
 
 func (m *Auth) ValidateToken(signedToken string) (string, error) {
@@ -96,7 +96,7 @@ func (m *Auth) ValidateToken(signedToken string) (string, error) {
 		return "", err
 	}
 
-	if claims.ExpiresAt < time.Now().Local().Unix() {
+	if claims.ExpiresAt.Unix() < time.Now().Local().Unix() {
 		err = errors.New("token expired")
 
 		return "", err
@@ -109,8 +109,8 @@ func (m *Auth) GenerateJWT(email string) (tokenString string, err error) {
 	expirationTime := time.Now().Add(24 * 30 * time.Hour)
 	claims := &JWTClaim{
 		Email: email,
-		StandardClaims: jwt.StandardClaims{
-			ExpiresAt: expirationTime.Unix(),
+		RegisteredClaims: jwt.RegisteredClaims{
+			ExpiresAt: jwt.NewNumericDate(expirationTime),
 		},
 	}
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)

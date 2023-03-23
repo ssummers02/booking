@@ -1,11 +1,12 @@
 package handler
 
 import (
-	"booking/internal/delivery/api/restmodel"
-	"booking/internal/domain/dto"
 	"encoding/json"
 	"net/http"
 	"strconv"
+
+	"github.com/ssummers02/booking/internal/delivery/api/restmodel"
+	"github.com/ssummers02/booking/internal/domain/dto"
 
 	"github.com/gorilla/mux"
 )

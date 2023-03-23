@@ -1,9 +1,10 @@
 package handler
 
 import (
-	"booking/internal/delivery/api/middleware"
-	"booking/internal/domain/service"
 	"context"
+
+	"github.com/ssummers02/booking/internal/delivery/api/middleware"
+	"github.com/ssummers02/booking/internal/domain/service"
 
 	"net/http"
 	"time"

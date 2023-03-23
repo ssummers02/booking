@@ -1,10 +1,11 @@
 package repository
 
 import (
-	"booking/internal/domain/dto"
-	"booking/internal/domain/entity"
-	"booking/internal/infrastructure/dbmodel"
 	"context"
+
+	"github.com/ssummers02/booking/internal/domain/dto"
+	"github.com/ssummers02/booking/internal/domain/entity"
+	"github.com/ssummers02/booking/internal/infrastructure/dbmodel"
 
 	"github.com/gocraft/dbr/v2"
 )

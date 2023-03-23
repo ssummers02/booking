@@ -1,14 +1,15 @@
 package middleware
 
 import (
-	"booking/internal/domain"
-	"booking/internal/domain/service"
 	"context"
 	"encoding/json"
 	"errors"
 	"log"
 	"net/http"
 	"time"
+
+	"github.com/ssummers02/booking/internal/domain"
+	"github.com/ssummers02/booking/internal/domain/service"
 
 	"github.com/dgrijalva/jwt-go"
 )

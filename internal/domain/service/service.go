@@ -1,8 +1,9 @@
 package service
 
 import (
-	"booking/internal/domain/entity"
 	"context"
+
+	"github.com/ssummers02/booking/internal/domain/entity"
 )
 
 type Logger interface {

@@ -1,11 +1,12 @@
 package handler
 
 import (
-	"booking/internal/delivery/api/restmodel"
-	"booking/internal/domain/dto"
 	"encoding/json"
 	"log"
 	"net/http"
+
+	"github.com/ssummers02/booking/internal/delivery/api/restmodel"
+	"github.com/ssummers02/booking/internal/domain/dto"
 )
 
 func (s *Server) signIn(w http.ResponseWriter, r *http.Request) {

@@ -1,9 +1,10 @@
 package dbmodel
 
 import (
-	"booking/internal/domain"
 	"encoding/json"
 	"fmt"
+
+	"github.com/ssummers02/booking/internal/domain"
 )
 
 // scan from data into dst, dst must be a pointer.

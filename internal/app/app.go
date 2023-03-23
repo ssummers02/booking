@@ -1,16 +1,17 @@
 package app
 
 import (
-	"booking/internal/bootstrap"
-	"booking/internal/delivery/api/handler"
-	"booking/internal/delivery/api/middleware"
-	"booking/internal/domain/service"
-	"booking/internal/infrastructure/repository"
 	"context"
 	"log"
 	"os"
 	"os/signal"
 	"syscall"
+
+	"github.com/ssummers02/booking/internal/bootstrap"
+	"github.com/ssummers02/booking/internal/delivery/api/handler"
+	"github.com/ssummers02/booking/internal/delivery/api/middleware"
+	"github.com/ssummers02/booking/internal/domain/service"
+	"github.com/ssummers02/booking/internal/infrastructure/repository"
 
 	"github.com/gocraft/dbr/v2"
 	"github.com/sirupsen/logrus"

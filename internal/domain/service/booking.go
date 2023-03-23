@@ -1,10 +1,11 @@
 package service
 
 import (
-	"booking/internal/domain"
-	"booking/internal/domain/entity"
 	"context"
 	"errors"
+
+	"github.com/ssummers02/booking/internal/domain"
+	"github.com/ssummers02/booking/internal/domain/entity"
 )
 
 type BookingService struct {

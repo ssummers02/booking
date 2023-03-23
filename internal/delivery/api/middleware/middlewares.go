@@ -1,7 +1,7 @@
 package middleware
 
 import (
-	"booking/internal/domain/service"
+	"github.com/ssummers02/booking/internal/domain/service"
 )
 
 // M provides list of all middlewares.

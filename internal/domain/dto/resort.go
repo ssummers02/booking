@@ -1,9 +1,9 @@
 package dto
 
 import (
-	"booking/internal/delivery/api/restmodel"
-	"booking/internal/domain/entity"
-	"booking/internal/infrastructure/dbmodel"
+	"github.com/ssummers02/booking/internal/delivery/api/restmodel"
+	"github.com/ssummers02/booking/internal/domain/entity"
+	"github.com/ssummers02/booking/internal/infrastructure/dbmodel"
 )
 
 func ResortFromDB(resort dbmodel.Resort) entity.Resort {

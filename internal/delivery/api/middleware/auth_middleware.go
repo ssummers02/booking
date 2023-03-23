@@ -11,7 +11,7 @@ import (
 	"github.com/ssummers02/booking/internal/domain"
 	"github.com/ssummers02/booking/internal/domain/service"
 
-	"github.com/dgrijalva/jwt-go"
+	"github.com/golang-jwt/jwt/v5"
 )
 
 type Auth struct {

@@ -64,7 +64,7 @@ func (r *ResortRepository) CreateResort(ctx context.Context, e entity.Resort) (e
 	err := r.BeginTx(ctx, func(tx *dbr.Tx) error {
 		return tx.InsertInto("resorts").
 			Returning("id").
-			Columns("name", "city_id", "description", "address").
+			Columns("name", "owner_id", "city_id", "description", "address").
 			Record(&resort).
 			Load(&resort.ID)
 	})

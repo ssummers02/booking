@@ -1,7 +1,7 @@
 package restmodel
 
 type Resort struct {
-	ID          int64  `json:"id" validate:"required"`
+	ID          int64  `json:"id"`
 	Name        string `json:"name" validate:"required"`
 	CityID      int64  `json:"city_id" validate:"required"`
 	OwnerID     int64  `json:"owner_id"`

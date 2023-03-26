@@ -88,12 +88,10 @@ func (s *Server) initRoutes() {
 	router.HandleFunc("/resorts/bookings", s.getBookingByOwner).Methods(http.MethodGet)
 
 	router.HandleFunc("/booking", s.createBooking).Methods(http.MethodPost)
-	/*	router.HandleFunc("/user", s.getUser).
-			Methods(http.MethodGet)
-		router.HandleFunc("/user", s.createUser).
-			Methods(http.MethodPost)
-		router.HandleFunc("/user", s.updateUser).
-			Methods(http.MethodPut)
-		router.HandleFunc("/user", s.deleteUser).
-			Methods(http.MethodDelete)*/
+	router.HandleFunc("/user", s.getUser).
+		Methods(http.MethodGet)
+	router.HandleFunc("/user", s.updateUser).
+		Methods(http.MethodPut)
+	router.HandleFunc("/user", s.deleteUser).
+		Methods(http.MethodDelete)
 }

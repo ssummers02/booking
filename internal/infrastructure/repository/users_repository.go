@@ -53,3 +53,35 @@ func (r *UserRepository) CreateUser(ctx context.Context, e entity.User) (entity.
 
 	return dto.UserFromDB(u), err
 }
+
+func (r *UserRepository) UpdateUser(ctx context.Context, e entity.User) (entity.User, error) {
+	u := dto.UserToDB(e)
+
+	err := r.BeginTx(ctx, func(tx *dbr.Tx) error {
+		_, err := tx.Update("users").
+			Set("first_name", u.FirstName).
+			Set("surname", u.Surname).
+			Set("middle_name", u.MiddleName).
+			Set("phone", u.Phone).
+			Where("id = ?", e.ID).
+			Exec()
+
+		if err != nil {
+			return err
+		}
+
+		return err
+	})
+
+	return dto.UserFromDB(u), err
+}
+
+func (r *UserRepository) DeleteUser(ctx context.Context, id int64) error {
+	return r.BeginTx(ctx, func(tx *dbr.Tx) error {
+		_, err := tx.DeleteFrom("users").
+			Where("id = ?", id).
+			Exec()
+
+		return err
+	})
+}

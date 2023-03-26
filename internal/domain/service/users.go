@@ -25,3 +25,11 @@ func (s *UsersService) CreateUser(ctx context.Context, e entity.User) (entity.Us
 func (s *UsersService) GetUsersByEmail(ctx context.Context, mail string) (entity.User, error) {
 	return s.repo.GetUsersByEmail(ctx, mail)
 }
+
+func (s *UsersService) UpdateUser(ctx context.Context, e entity.User) (entity.User, error) {
+	return s.repo.UpdateUser(ctx, e)
+}
+
+func (s *UsersService) DeleteUser(ctx context.Context, id int64) error {
+	return s.repo.DeleteUser(ctx, id)
+}

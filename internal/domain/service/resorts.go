@@ -66,7 +66,7 @@ func (s *ResortsService) DeleteResort(ctx context.Context, id int64) error {
 func (s *ResortsService) UpdateResort(ctx context.Context, e entity.Resort) (entity.Resort, error) {
 	user, ok := ctx.Value("user").(entity.User)
 	if !ok {
-		return entity.Resort{}, domain.NewError(domain.ErrCodeForbidden, "user is not owner")
+		return entity.Resort{}, domain.NewError(domain.ErrCodeForbidden, "not authorized")
 	}
 
 	resort, err := s.GetResortByID(ctx, e.ID)

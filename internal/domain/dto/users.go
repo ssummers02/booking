@@ -60,3 +60,14 @@ func UserToRest(e entity.User, token string) restmodel.User {
 		Token:      token,
 	}
 }
+func UserToRestWithoutToken(e entity.User) restmodel.User {
+	return restmodel.User{
+		ID:         e.ID,
+		FirstName:  e.FirstName,
+		Surname:    e.Surname,
+		MiddleName: e.MiddleName,
+		Email:      e.Email,
+		Phone:      e.Phone,
+		RoleID:     int64(e.RoleID),
+	}
+}

@@ -40,6 +40,8 @@ type InventoryStorage interface {
 	UpdateInventory(ctx context.Context, e entity.Inventory) (entity.Inventory, error)
 	GetInventoriesTypes(ctx context.Context) ([]entity.InventoryType, error)
 	GetInventoriesByFilters(ctx context.Context, filter entity.InventoryFilter) ([]entity.Inventory, error)
+	UpdateImg(ctx context.Context, e entity.Img) (entity.Img, error)
+	GetImgByInventoryID(ctx context.Context, id int64) (entity.Img, error)
 }
 
 type BookingStorage interface {

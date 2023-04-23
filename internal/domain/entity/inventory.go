@@ -21,3 +21,10 @@ type InventoryFilter struct {
 	StartTime *time.Time
 	EndTime   *time.Time
 }
+
+type Img struct {
+	ID          int64
+	InventoryID int64
+	Name        string
+	Bytes       []byte
+}

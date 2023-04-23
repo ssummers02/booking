@@ -99,3 +99,30 @@ func (s *InventoryService) GetInventoriesTypes(ctx context.Context) ([]entity.In
 func (s *InventoryService) GetInventoriesByFilters(ctx context.Context, filters entity.InventoryFilter) ([]entity.Inventory, error) {
 	return s.repo.GetInventoriesByFilters(ctx, filters)
 }
+
+func (s *InventoryService) UpdateImg(ctx context.Context, img entity.Img) (entity.Img, error) {
+	user, ok := ctx.Value("user").(entity.User)
+	if !ok {
+		return entity.Img{}, domain.NewError(domain.ErrCodeForbidden, "user is not role owner")
+	}
+
+	inventory, err := s.GetInventoryByID(ctx, img.InventoryID)
+	if err != nil {
+		return entity.Img{}, err
+	}
+
+	resort, err := s.resortsService.GetResortByID(ctx, inventory.ResortID)
+	if err != nil {
+		return entity.Img{}, err
+	}
+
+	if resort.OwnerID != user.ID {
+		return entity.Img{}, domain.NewError(domain.ErrCodeForbidden, "user is not owner")
+	}
+
+	return s.repo.UpdateImg(ctx, img)
+}
+
+func (s *InventoryService) GetImgByInventoryID(ctx context.Context, id int64) (entity.Img, error) {
+	return s.repo.GetImgByInventoryID(ctx, id)
+}

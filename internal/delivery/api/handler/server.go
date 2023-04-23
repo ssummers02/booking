@@ -76,6 +76,8 @@ func (s *Server) initRoutes() {
 
 	router.HandleFunc("/inventories/{id:[0-9]+}", s.getInventoryByID).Methods(http.MethodGet)
 	router.HandleFunc("/inventories/filter", s.getInventoriesByFilters).Methods(http.MethodPost)
+	router.HandleFunc("/inventories/update_img/{id:[0-9]+}", s.updateIMG).Methods(http.MethodPost)
+	router.HandleFunc("/inventories/get_img/{id:[0-9]+}", s.getIMG).Methods(http.MethodGet)
 
 	router.HandleFunc("/inventories", s.createInventory).Methods(http.MethodPost)
 	router.HandleFunc("/inventories", s.updateInventory).Methods(http.MethodPut)

@@ -2,6 +2,7 @@ package handler
 
 import (
 	"encoding/json"
+	"io"
 	"net/http"
 	"strconv"
 
@@ -200,4 +201,58 @@ func (s *Server) getInventoriesByFilters(w http.ResponseWriter, r *http.Request)
 	}
 
 	SendOK(w, http.StatusOK, dto.InventorysToRest(inventory))
+}
+
+func (s *Server) updateIMG(w http.ResponseWriter, r *http.Request) {
+	var (
+		ctx = r.Context()
+		id  = mux.Vars(r)["id"]
+	)
+
+	parseID, err := strconv.ParseInt(id, 10, 64)
+	if err != nil {
+		SendErr(w, http.StatusInternalServerError, err.Error())
+
+		return
+	}
+
+	file, handler, err := r.FormFile("image")
+	if err != nil {
+		SendErr(w, http.StatusBadRequest, "invalid image")
+
+	}
+	defer file.Close()
+
+	data, err := io.ReadAll(file)
+	if err != nil {
+		SendErr(w, http.StatusBadRequest, "invalid image")
+	}
+
+	_, err = s.services.InventoryService.UpdateImg(ctx, dto.ImgFromRest(parseID, data, handler.Filename))
+	if err != nil {
+		return
+	}
+	SendOK(w, http.StatusOK, nil)
+}
+
+func (s *Server) getIMG(w http.ResponseWriter, r *http.Request) {
+	var (
+		ctx = r.Context()
+		id  = mux.Vars(r)["id"]
+	)
+
+	parseID, err := strconv.ParseInt(id, 10, 64)
+	if err != nil {
+		SendErr(w, http.StatusInternalServerError, err.Error())
+
+		return
+	}
+	img, err := s.services.InventoryService.GetImgByInventoryID(ctx, parseID)
+	if err != nil {
+		return
+	}
+	w.WriteHeader(http.StatusOK)
+	w.Header().Set("Content-Type", "image/jpeg")
+	w.Header().Set("Name", img.Name)
+	w.Write(img.Bytes)
 }

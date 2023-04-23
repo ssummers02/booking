@@ -17,8 +17,8 @@ func (m *Cors) Handler(next http.Handler) http.Handler {
 		func(w http.ResponseWriter, r *http.Request) {
 			header := w.Header()
 
-			header.Set("Accept", "application/json")
-			header.Set("Content-Type", "application/json")
+			header.Set("Accept", "application/json,image/*")
+			header.Set("Content-Type", "application/json,image/*")
 			header.Set("Access-Control-Allow-Origin", "*")
 			header.Set("Access-Control-Allow-Methods", "GET, OPTIONS, POST, PUT")
 

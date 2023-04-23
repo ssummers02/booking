@@ -21,3 +21,10 @@ type InventoryFilter struct {
 	StartTime *time.Time `json:"start_time"`
 	EndTime   *time.Time `json:"end_time"`
 }
+
+type Img struct {
+	ID          int64  `json:"id"`
+	InventoryID int64  `json:"inventory_id"`
+	Name        string `json:"name"`
+	Bytes       []byte `json:"bytes"`
+}

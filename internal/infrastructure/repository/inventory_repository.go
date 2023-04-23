@@ -143,3 +143,40 @@ func setInventoryFilter(stmt *dbr.SelectStmt, filter entity.InventoryFilter) {
 	}
 
 }
+
+func (r *InventoryRepository) UpdateImg(ctx context.Context, e entity.Img) (entity.Img, error) {
+	img := dto.ImgToDB(e)
+
+	err := r.BeginTx(ctx, func(tx *dbr.Tx) error {
+		stmt, err := tx.Prepare("INSERT INTO images (inventory_id, name, data) " +
+			"VALUES ($1, $2, $3) " +
+			"ON CONFLICT (inventory_id) DO UPDATE SET name = $2, data = $3 ")
+		if err != nil {
+			return err
+		}
+
+		defer stmt.Close()
+
+		_, err = stmt.Exec(img.InventoryID, img.Name, img.Bytes)
+		if err != nil {
+			return err
+		}
+
+		return nil
+	})
+
+	return dto.ImgFromDB(img), err
+}
+
+func (r *InventoryRepository) GetImgByInventoryID(ctx context.Context, id int64) (entity.Img, error) {
+	var img dbmodel.Img
+
+	err := r.BeginTx(ctx, func(tx *dbr.Tx) error {
+		return tx.Select("*").
+			From("images").
+			Where("inventory_id = ?", id).
+			LoadOne(&img)
+	})
+
+	return dto.ImgFromDB(img), err
+}

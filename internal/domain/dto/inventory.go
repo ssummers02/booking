@@ -106,3 +106,29 @@ func InventoryFilterFromRest(r restmodel.InventoryFilter) entity.InventoryFilter
 		EndTime:   r.EndTime,
 	}
 }
+
+func ImgToDB(e entity.Img) dbmodel.Img {
+	return dbmodel.Img{
+		InventoryID: e.InventoryID,
+		Name:        e.Name,
+		Bytes:       e.Bytes,
+	}
+
+}
+
+func ImgFromDB(db dbmodel.Img) entity.Img {
+	return entity.Img{
+		ID:          db.ID,
+		InventoryID: db.InventoryID,
+		Name:        db.Name,
+		Bytes:       db.Bytes,
+	}
+}
+
+func ImgFromRest(parseID int64, data []byte, name string) entity.Img {
+	return entity.Img{
+		InventoryID: parseID,
+		Name:        name,
+		Bytes:       data,
+	}
+}

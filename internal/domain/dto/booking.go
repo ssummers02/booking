@@ -64,7 +64,6 @@ func BookingToDB(booking entity.Booking) dbmodel.Booking {
 }
 
 func BookingCreateEntity(booking restmodel.Booking, userID int64) entity.Booking {
-
 	return entity.Booking{
 		UserID:      userID,
 		InventoryID: booking.InventoryID,

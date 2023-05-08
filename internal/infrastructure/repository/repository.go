@@ -57,5 +57,6 @@ func NewRepository(db *dbr.Connection) *service.Storages {
 		Resort:    NewResortRepository(base),
 		Inventory: NewInventoryRepository(base),
 		Booking:   NewBookingRepository(base),
+		Comment:   NewCommentsRepository(base),
 	}
 }

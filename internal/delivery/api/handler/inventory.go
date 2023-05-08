@@ -219,7 +219,6 @@ func (s *Server) updateIMG(w http.ResponseWriter, r *http.Request) {
 	file, handler, err := r.FormFile("image")
 	if err != nil {
 		SendErr(w, http.StatusBadRequest, "invalid image")
-
 	}
 	defer file.Close()
 
@@ -232,6 +231,7 @@ func (s *Server) updateIMG(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		return
 	}
+
 	SendOK(w, http.StatusOK, nil)
 }
 
@@ -247,10 +247,12 @@ func (s *Server) getIMG(w http.ResponseWriter, r *http.Request) {
 
 		return
 	}
+
 	img, err := s.services.InventoryService.GetImgByInventoryID(ctx, parseID)
 	if err != nil {
 		return
 	}
+
 	w.WriteHeader(http.StatusOK)
 	w.Header().Set("Content-Type", "image/jpeg")
 	w.Header().Set("Name", img.Name)

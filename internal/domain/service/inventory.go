@@ -29,7 +29,11 @@ func (s *InventoryService) GetInventoryByResortID(ctx context.Context, resortID 
 }
 
 func (s *InventoryService) CreateInventory(ctx context.Context, e entity.Inventory) (entity.Inventory, error) {
-	user := ctx.Value("user").(entity.User)
+	user, ok := ctx.Value("user").(entity.User)
+	if !ok {
+		return entity.Inventory{}, domain.NewError(domain.ErrCodeNotAuthorized, "user is not authorized")
+	}
+
 	if !user.IsOwnerRole() {
 		return entity.Inventory{}, domain.NewError(domain.ErrCodeForbidden, "user is not owner")
 	}

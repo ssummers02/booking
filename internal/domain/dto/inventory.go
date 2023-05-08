@@ -113,7 +113,6 @@ func ImgToDB(e entity.Img) dbmodel.Img {
 		Name:        e.Name,
 		Bytes:       e.Bytes,
 	}
-
 }
 
 func ImgFromDB(db dbmodel.Img) entity.Img {

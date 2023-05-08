@@ -59,13 +59,14 @@ func (s *BookingService) CreateBooking(ctx context.Context, booking entity.Booki
 	if err != nil {
 		return entity.Booking{}, err
 	}
+
 	return s.GetBookingByID(ctx, createBooking.ID)
 }
 
 func (s *BookingService) GetBookingByResortID(ctx context.Context, resortID int64) ([]entity.Booking, error) {
 	user, ok := ctx.Value("user").(entity.User)
 	if !ok {
-		return []entity.Booking{}, domain.NewError(domain.ErrCodeForbidden, "user is not role owner")
+		return []entity.Booking{}, domain.NewError(domain.ErrCodeAlreadyExists, "user is not authorized")
 	}
 
 	resort, err := s.ResortsService.GetResortByID(ctx, resortID)

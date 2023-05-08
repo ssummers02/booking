@@ -60,9 +60,6 @@ func (s *Server) initRoutes() {
 		_, _ = writer.Write([]byte("ok"))
 	})
 
-	router.HandleFunc("/user/register", s.register).Methods(http.MethodPost)
-	router.HandleFunc("/user/login", s.signIn).Methods(http.MethodPost)
-
 	router.HandleFunc("/cities", s.getCities).Methods(http.MethodGet)
 
 	router.HandleFunc("/resorts/{id:[0-9]+}", s.getResortByID).Methods(http.MethodGet)
@@ -72,12 +69,12 @@ func (s *Server) initRoutes() {
 	router.HandleFunc("/resorts", s.createResort).Methods(http.MethodPost)
 	router.HandleFunc("/resorts", s.updateResort).Methods(http.MethodPut)
 	router.HandleFunc("/resorts/{id:[0-9]+}", s.deleteResort).Methods(http.MethodDelete)
-	router.HandleFunc("/resorts/inventories/{id:[0-9]+}", s.getInventoryByResort).Methods(http.MethodGet)
 
 	router.HandleFunc("/inventories/{id:[0-9]+}", s.getInventoryByID).Methods(http.MethodGet)
 	router.HandleFunc("/inventories/filter", s.getInventoriesByFilters).Methods(http.MethodPost)
 	router.HandleFunc("/inventories/update_img/{id:[0-9]+}", s.updateIMG).Methods(http.MethodPost)
 	router.HandleFunc("/inventories/get_img/{id:[0-9]+}", s.getIMG).Methods(http.MethodGet)
+	router.HandleFunc("/resorts/inventories/{id:[0-9]+}", s.getInventoryByResort).Methods(http.MethodGet)
 
 	router.HandleFunc("/inventories", s.createInventory).Methods(http.MethodPost)
 	router.HandleFunc("/inventories", s.updateInventory).Methods(http.MethodPut)
@@ -88,12 +85,17 @@ func (s *Server) initRoutes() {
 	router.HandleFunc("/user/bookings", s.getBookingsByUserID).Methods(http.MethodGet)
 	router.HandleFunc("/resorts/bookings/{id:[0-9]+}", s.getBookingByResortID).Methods(http.MethodGet)
 	router.HandleFunc("/resorts/bookings", s.getBookingByOwner).Methods(http.MethodGet)
-
 	router.HandleFunc("/booking", s.createBooking).Methods(http.MethodPost)
-	router.HandleFunc("/user", s.getUser).
-		Methods(http.MethodGet)
-	router.HandleFunc("/user", s.updateUser).
-		Methods(http.MethodPut)
-	router.HandleFunc("/user", s.deleteUser).
-		Methods(http.MethodDelete)
+
+	router.HandleFunc("/user/register", s.register).Methods(http.MethodPost)
+	router.HandleFunc("/user/login", s.signIn).Methods(http.MethodPost)
+	router.HandleFunc("/user", s.getUser).Methods(http.MethodGet)
+	router.HandleFunc("/user", s.updateUser).Methods(http.MethodPut)
+	router.HandleFunc("/user", s.deleteUser).Methods(http.MethodDelete)
+
+	router.HandleFunc("/comments", s.createComment).Methods(http.MethodPost)
+	router.HandleFunc("/comments/{id:[0-9]+}", s.getCommentByID).Methods(http.MethodGet)
+	router.HandleFunc("/resorts/comments/{id:[0-9]+}", s.getCommentByResortID).Methods(http.MethodGet)
+	router.HandleFunc("/comments/{id:[0-9]+}", s.deleteComment).Methods(http.MethodDelete)
+	router.HandleFunc("/inventories/comments/{id:[0-9]+}", s.getCommentsByInventory).Methods(http.MethodGet)
 }

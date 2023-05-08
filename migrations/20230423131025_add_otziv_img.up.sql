@@ -13,5 +13,4 @@ CREATE TABLE comment
     user_id BIGINT REFERENCES users (id),
     inventory_id BIGINT REFERENCES inventory (id),
     text    TEXT NOT NULL
-
 )

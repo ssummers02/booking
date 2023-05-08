@@ -12,7 +12,3 @@ type Session struct {
 
 	Transaction AbstractTransaction
 }
-
-func (sess Session) IsAuthorized() bool {
-	return sess.User.ID != 0
-}

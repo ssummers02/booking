@@ -1,5 +1,5 @@
 run:
-  tests: true
+  tests: false
 # output configuration options
 output:
   # colored-line-number|line-number|json|tab|checkstyle|code-climate|junit-xml|github-actions

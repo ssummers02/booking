@@ -85,6 +85,7 @@ func (s *Server) register(w http.ResponseWriter, r *http.Request) {
 
 func (s *Server) getUser(w http.ResponseWriter, r *http.Request) {
 	var ctx = r.Context()
+
 	user, ok := ctx.Value("user").(entity.User)
 	if !ok {
 		SendErr(w, http.StatusForbidden, "not authorized")
@@ -96,8 +97,8 @@ func (s *Server) getUser(w http.ResponseWriter, r *http.Request) {
 
 		return
 	}
-	SendOK(w, http.StatusOK, dto.UserToRestWithoutToken(user))
 
+	SendOK(w, http.StatusOK, dto.UserToRestWithoutToken(user))
 }
 
 func (s *Server) updateUser(w http.ResponseWriter, r *http.Request) {

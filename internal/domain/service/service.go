@@ -6,16 +6,6 @@ import (
 	"github.com/ssummers02/booking/internal/domain/entity"
 )
 
-type Logger interface {
-	Debugw(msg string, keysAndValues ...interface{})
-	Infow(msg string, keysAndValues ...interface{})
-	Warnw(msg string, keysAndValues ...interface{})
-	Errorw(msg string, keysAndValues ...interface{})
-	Fatalw(msg string, keysAndValues ...interface{})
-	Fatal(args ...interface{})
-	Sync() error
-}
-
 type Service struct {
 	entity.Transactioner
 
@@ -23,6 +13,7 @@ type Service struct {
 	ResortsService   ResortsService
 	InventoryService InventoryService
 	BookingService   BookingService
+	CommentService   CommentService
 }
 
 func (s *Service) DoTransaction(ctx context.Context, f func() error) (err error) {
@@ -47,12 +38,14 @@ func NewServices(r *Storages) *Service {
 	resort := NewResortsService(r.Resort)
 	inventory := NewInventoryService(r.Inventory, resort)
 	booking := NewBookingService(r.Booking, resort, inventory)
+	comment := NewCommentService(r.Comment)
 
 	return &Service{
 		UsersService:     *user,
 		ResortsService:   *resort,
 		InventoryService: *inventory,
 		BookingService:   *booking,
+		CommentService:   *comment,
 	}
 }
 
@@ -61,4 +54,5 @@ type Storages struct {
 	Resort    ResortStorage
 	Inventory InventoryStorage
 	Booking   BookingStorage
+	Comment   CommentStorage
 }

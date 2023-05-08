@@ -118,6 +118,7 @@ func (s *Server) createResort(w http.ResponseWriter, r *http.Request) {
 	err := json.NewDecoder(r.Body).Decode(&data)
 	if err != nil {
 		SendErr(w, http.StatusBadRequest, "invalid json")
+
 		return
 	}
 

@@ -39,9 +39,13 @@ func (s *Server) getBookingByID(w http.ResponseWriter, r *http.Request) {
 // Возвращает бронирования по ID пользователя.
 func (s *Server) getBookingsByUserID(w http.ResponseWriter, r *http.Request) {
 	var (
-		ctx  = r.Context()
-		user = r.Context().Value("user").(entity.User)
+		ctx = r.Context()
 	)
+
+	user, ok := ctx.Value("user").(entity.User)
+	if !ok {
+		SendErr(w, http.StatusForbidden, "not authorized")
+	}
 
 	resorts, err := s.services.BookingService.GetBookingsByUserID(ctx, user.ID)
 	if err != nil {
@@ -57,9 +61,13 @@ func (s *Server) getBookingsByUserID(w http.ResponseWriter, r *http.Request) {
 func (s *Server) createBooking(w http.ResponseWriter, r *http.Request) {
 	var (
 		ctx  = r.Context()
-		user = r.Context().Value("user").(entity.User)
 		data restmodel.Booking
 	)
+
+	user, ok := ctx.Value("user").(entity.User)
+	if !ok {
+		SendErr(w, http.StatusForbidden, "not authorized")
+	}
 
 	err := json.NewDecoder(r.Body).Decode(&data)
 	if err != nil {

@@ -52,6 +52,7 @@ func (r *ResortRepository) GetResortByOwnerID(ctx context.Context, id int64) ([]
 			From("resorts").
 			Where("owner_id = ?", id).
 			Load(&resort)
+
 		return err
 	})
 

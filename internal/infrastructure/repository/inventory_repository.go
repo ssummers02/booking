@@ -141,7 +141,6 @@ func setInventoryFilter(stmt *dbr.SelectStmt, filter entity.InventoryFilter) {
 	} else {
 		stmt.Where("1 = 1") // Placeholder condition to prevent SQL syntax errors
 	}
-
 }
 
 func (r *InventoryRepository) UpdateImg(ctx context.Context, e entity.Img) (entity.Img, error) {

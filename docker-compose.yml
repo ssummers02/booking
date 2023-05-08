@@ -12,7 +12,7 @@ services:
     ports:
       - ${DB_PORT}:5432
       - "5433:5433"
-    restart: on-failure
+    restart: always
     networks:
       - booking
 

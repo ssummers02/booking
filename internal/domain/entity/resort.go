@@ -9,6 +9,7 @@ type Resort struct {
 	Description string
 	OwnerID     int64
 	Address     string
+	AvgRating   float64
 	CreatedAt   time.Time
 	UpdatedAt   time.Time
 }

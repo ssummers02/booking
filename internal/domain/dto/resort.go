@@ -14,6 +14,7 @@ func ResortFromDB(resort dbmodel.Resort) entity.Resort {
 		OwnerID:     resort.OwnerID,
 		Description: resort.Description,
 		Address:     resort.Address,
+		AvgRating:   resort.AvgRating,
 		CreatedAt:   resort.CreatedAt,
 		UpdatedAt:   resort.UpdatedAt,
 	}
@@ -78,6 +79,7 @@ func ResortToRest(resort entity.Resort) restmodel.Resort {
 		ID:          resort.ID,
 		Name:        resort.Name,
 		CityID:      resort.CityID,
+		AvgRating:   resort.AvgRating,
 		OwnerID:     resort.OwnerID,
 		Description: resort.Description,
 		Address:     resort.Address,

@@ -9,6 +9,7 @@ type Resort struct {
 	OwnerID     int64     `db:"owner_id"`
 	Description string    `db:"description"`
 	Address     string    `db:"address"`
+	AvgRating   float64   `db:"avg_rating"`
 	CreatedAt   time.Time `db:"created_at"`
 	UpdatedAt   time.Time `db:"updated_at"`
 }

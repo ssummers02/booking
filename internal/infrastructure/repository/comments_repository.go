@@ -36,8 +36,9 @@ func (r *CommentsRepository) GetCommentByID(ctx context.Context, id int64) (enti
 	var comment dbmodel.Comment
 
 	err := r.BeginTx(ctx, func(tx *dbr.Tx) error {
-		return tx.Select("*").
+		return tx.Select("comments.*, users.surname").
 			From("comments").
+			LeftJoin("users", "comments.user_id = users.id").
 			Where("comments.id = ?", id).
 			LoadOne(&comment)
 	})
@@ -49,8 +50,9 @@ func (r *CommentsRepository) GetCommentsByResort(ctx context.Context, id int64) 
 	var comments []dbmodel.Comment
 
 	err := r.BeginTx(ctx, func(tx *dbr.Tx) error {
-		_, err := tx.Select("comments.*").
+		_, err := tx.Select("comments.*, users.surname").
 			From("comments").
+			LeftJoin("users", "comments.user_id = users.id").
 			LeftJoin("inventory", "comments.inventory_id = inventory.id").
 			Where("inventory.resort_id = ?", id).
 			Load(&comments)

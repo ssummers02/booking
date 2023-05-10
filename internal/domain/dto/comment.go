@@ -10,6 +10,7 @@ func CommentFromDB(comment dbmodel.Comment) entity.Comment {
 	return entity.Comment{
 		ID:          comment.ID,
 		UserID:      comment.UserID,
+		UserName:    comment.UserName,
 		InventoryID: comment.InventoryID,
 		Text:        comment.Text,
 		Rating:      comment.Rating,
@@ -40,6 +41,7 @@ func CommentToRest(comment entity.Comment) restmodel.Comment {
 	return restmodel.Comment{
 		ID:          comment.ID,
 		UserID:      comment.UserID,
+		UserName:    comment.UserName,
 		InventoryID: comment.InventoryID,
 		Rating:      comment.Rating,
 		Text:        comment.Text,

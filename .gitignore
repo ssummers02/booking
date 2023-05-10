@@ -3,7 +3,7 @@
 .vscode*
 
 #configs
-*.env
+.env
 
 #binary
 /build

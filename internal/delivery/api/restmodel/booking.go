@@ -5,6 +5,7 @@ import "time"
 type Booking struct {
 	ID          int64     `json:"id"`
 	UserID      int64     `json:"user_id"`
+	User        User      `json:"user"`
 	InventoryID int64     `json:"inventory_id"`
 	Inventory   Inventory `json:"inventory"`
 	Resort      Resort    `json:"resort"`

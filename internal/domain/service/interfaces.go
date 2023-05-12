@@ -13,6 +13,7 @@ type UserStorage interface {
 	CreateUser(ctx context.Context, e entity.User) (entity.User, error)
 	DeleteUser(ctx context.Context, id int64) error
 	UpdateUser(ctx context.Context, e entity.User) (entity.User, error)
+	GetUsersByIDs(ctx context.Context, ids []int64) ([]entity.User, error)
 }
 
 type ResortStorage interface {

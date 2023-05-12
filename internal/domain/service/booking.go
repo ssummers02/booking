@@ -13,13 +13,16 @@ type BookingService struct {
 
 	ResortsService   *ResortsService
 	InventoryService *InventoryService
+	UsersService     *UsersService
 }
 
-func NewBookingService(repo BookingStorage, resortsService *ResortsService, inventoryService *InventoryService) *BookingService {
+func NewBookingService(repo BookingStorage, resortsService *ResortsService, inventoryService *InventoryService, usersService *UsersService,
+) *BookingService {
 	return &BookingService{
 		repo:             repo,
 		ResortsService:   resortsService,
 		InventoryService: inventoryService,
+		UsersService:     usersService,
 	}
 }
 
@@ -94,6 +97,20 @@ func (s *BookingService) GetBookingByOwner(ctx context.Context) ([]entity.Bookin
 	booking, err := s.repo.GetBookingsByOwner(ctx, user.ID)
 	if err != nil {
 		return []entity.Booking{}, err
+	}
+
+	users := make([]int64, 0, len(booking))
+	for _, b := range booking {
+		users = append(users, b.UserID)
+	}
+
+	usersByIDs, err := s.UsersService.GetUsersByIDs(ctx, users)
+	if err != nil {
+		return nil, err
+	}
+
+	for i := range booking {
+		booking[i].User = usersByIDs[booking[i].UserID]
 	}
 
 	return booking, nil

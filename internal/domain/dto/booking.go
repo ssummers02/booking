@@ -33,6 +33,7 @@ func BookingToRest(booking entity.Booking) restmodel.Booking {
 	return restmodel.Booking{
 		ID:          booking.ID,
 		UserID:      booking.UserID,
+		User:        UserToRestWithoutToken(booking.User),
 		InventoryID: booking.InventoryID,
 		Inventory:   InventoryToRest(booking.Inventory),
 		Resort:      ResortToRest(booking.Resort),

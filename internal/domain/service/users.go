@@ -33,3 +33,21 @@ func (s *UsersService) UpdateUser(ctx context.Context, e entity.User) (entity.Us
 func (s *UsersService) DeleteUser(ctx context.Context, id int64) error {
 	return s.repo.DeleteUser(ctx, id)
 }
+func (s *UsersService) GetUsersByIDs(ctx context.Context, ids []int64) (map[int64]entity.User, error) {
+	users, err := s.repo.GetUsersByIDs(ctx, ids)
+	if err != nil {
+		return nil, err
+	}
+	userMap := make(map[int64]entity.User, len(users))
+	for _, user := range users {
+		userMap[user.ID] = user
+	}
+	return userMap, nil
+}
+func (s *UsersService) GetUsersByID(ctx context.Context, id int64) (entity.User, error) {
+	ds, err := s.GetUsersByIDs(ctx, []int64{id})
+	if err != nil {
+		return entity.User{}, err
+	}
+	return ds[id], nil
+}

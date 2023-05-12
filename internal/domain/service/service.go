@@ -37,7 +37,7 @@ func NewServices(r *Storages) *Service {
 	user := NewUsersService(r.User)
 	resort := NewResortsService(r.Resort)
 	inventory := NewInventoryService(r.Inventory, resort)
-	booking := NewBookingService(r.Booking, resort, inventory)
+	booking := NewBookingService(r.Booking, resort, inventory, user)
 	comment := NewCommentService(r.Comment)
 
 	return &Service{

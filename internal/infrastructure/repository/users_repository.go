@@ -85,3 +85,18 @@ func (r *UserRepository) DeleteUser(ctx context.Context, id int64) error {
 		return err
 	})
 }
+
+func (r *UserRepository) GetUsersByIDs(ctx context.Context, ids []int64) ([]entity.User, error) {
+	var u []dbmodel.User
+
+	err := r.BeginTx(ctx, func(tx *dbr.Tx) error {
+		_, err := tx.Select("*").
+			From("users").
+			Where("id IN ?", ids).
+			Load(&u)
+
+		return err
+	})
+
+	return dto.UsersFromDB(u), err
+}

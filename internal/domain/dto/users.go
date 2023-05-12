@@ -21,6 +21,15 @@ func UserFromDB(u dbmodel.User) entity.User {
 	}
 }
 
+func UsersFromDB(u []dbmodel.User) []entity.User {
+	users := make([]entity.User, 0, len(u))
+	for _, v := range u {
+		users = append(users, UserFromDB(v))
+	}
+
+	return users
+}
+
 func UserToDB(e entity.User) dbmodel.User {
 	return dbmodel.User{
 		ID:         e.ID,

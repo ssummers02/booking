@@ -5,6 +5,7 @@ import "time"
 type Booking struct {
 	ID          int64
 	UserID      int64
+	User        User
 	InventoryID int64
 	Inventory   Inventory
 	Resort      Resort

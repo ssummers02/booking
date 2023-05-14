@@ -66,7 +66,6 @@ func (r *InventoryRepository) UpdateInventory(ctx context.Context, e entity.Inve
 	err := r.BeginTx(ctx, func(tx *dbr.Tx) error {
 		_, err := tx.Update("inventory").
 			Set("price", inventory.Price).
-			Set("photo", inventory.Photo).
 			Where("id = ?", inventory.ID).
 			Exec()
 		if err != nil {

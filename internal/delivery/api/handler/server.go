@@ -71,13 +71,12 @@ func (s *Server) initRoutes() {
 	router.HandleFunc("/resorts/{id:[0-9]+}", s.deleteResort).Methods(http.MethodDelete)
 	router.HandleFunc("/resorts/ownerstats", s.getStatsByOwner).Methods(http.MethodPost)
 	router.HandleFunc("/resorts/stats/{id:[0-9]+}", s.getStatsByResorts).Methods(http.MethodPost)
+	router.HandleFunc("/resorts/inventories/{id:[0-9]+}", s.getInventoryByResort).Methods(http.MethodGet)
 
 	router.HandleFunc("/inventories/{id:[0-9]+}", s.getInventoryByID).Methods(http.MethodGet)
 	router.HandleFunc("/inventories/filter", s.getInventoriesByFilters).Methods(http.MethodPost)
 	router.HandleFunc("/inventories/update_img/{id:[0-9]+}", s.updateIMG).Methods(http.MethodPost)
 	router.HandleFunc("/inventories/get_img/{id:[0-9]+}", s.getIMG).Methods(http.MethodGet)
-	router.HandleFunc("/resorts/inventories/{id:[0-9]+}", s.getInventoryByResort).Methods(http.MethodGet)
-
 	router.HandleFunc("/inventories", s.createInventory).Methods(http.MethodPost)
 	router.HandleFunc("/inventories", s.updateInventory).Methods(http.MethodPut)
 	router.HandleFunc("/inventories/types", s.getInventoryTypes).Methods(http.MethodGet)

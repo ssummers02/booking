@@ -17,9 +17,11 @@ func InventoryFromDB(db dbmodel.Inventory) entity.Inventory {
 	if db.Photo != nil {
 		res.Photo = *db.Photo
 	}
+
 	if db.Name != nil {
 		res.Name = *db.Name
 	}
+
 	return res
 }
 

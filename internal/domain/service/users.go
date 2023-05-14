@@ -38,10 +38,12 @@ func (s *UsersService) GetUsersByIDs(ctx context.Context, ids []int64) (map[int6
 	if err != nil {
 		return nil, err
 	}
+
 	userMap := make(map[int64]entity.User, len(users))
 	for _, user := range users {
 		userMap[user.ID] = user
 	}
+
 	return userMap, nil
 }
 func (s *UsersService) GetUsersByID(ctx context.Context, id int64) (entity.User, error) {
@@ -49,5 +51,6 @@ func (s *UsersService) GetUsersByID(ctx context.Context, id int64) (entity.User,
 	if err != nil {
 		return entity.User{}, err
 	}
+
 	return ds[id], nil
 }

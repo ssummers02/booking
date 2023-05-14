@@ -178,6 +178,5 @@ func (s *Server) getStatsByResorts(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	fmt.Println(resort)
 	SendOK(w, http.StatusOK, dto.StatsToRest(resort))
 }

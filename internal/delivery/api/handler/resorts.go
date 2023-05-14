@@ -2,6 +2,7 @@ package handler
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"strconv"
 
@@ -87,7 +88,7 @@ func (s *Server) getResortsByFilter(w http.ResponseWriter, r *http.Request) {
 
 	err := json.NewDecoder(r.Body).Decode(&data)
 	if err != nil {
-		SendErr(w, http.StatusBadRequest, "invalid json")
+		SendErr(w, http.StatusBadRequest, fmt.Errorf("invalid json: %w", err).Error())
 
 		return
 	}
@@ -117,7 +118,7 @@ func (s *Server) createResort(w http.ResponseWriter, r *http.Request) {
 
 	err := json.NewDecoder(r.Body).Decode(&data)
 	if err != nil {
-		SendErr(w, http.StatusBadRequest, "invalid json")
+		SendErr(w, http.StatusBadRequest, fmt.Errorf("invalid json: %w", err).Error())
 
 		return
 	}
@@ -147,7 +148,7 @@ func (s *Server) updateResort(w http.ResponseWriter, r *http.Request) {
 
 	err := json.NewDecoder(r.Body).Decode(&data)
 	if err != nil {
-		SendErr(w, http.StatusBadRequest, "invalid json")
+		SendErr(w, http.StatusBadRequest, fmt.Errorf("invalid json: %w", err).Error())
 
 		return
 	}

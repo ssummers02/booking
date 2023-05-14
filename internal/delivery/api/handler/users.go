@@ -2,6 +2,7 @@ package handler
 
 import (
 	"encoding/json"
+	"fmt"
 	"log"
 	"net/http"
 
@@ -18,7 +19,7 @@ func (s *Server) signIn(w http.ResponseWriter, r *http.Request) {
 
 	err := json.NewDecoder(r.Body).Decode(&data)
 	if err != nil {
-		SendErr(w, http.StatusBadRequest, "invalid json")
+		SendErr(w, http.StatusBadRequest, fmt.Errorf("invalid json: %w", err).Error())
 
 		return
 	}
@@ -56,7 +57,7 @@ func (s *Server) register(w http.ResponseWriter, r *http.Request) {
 	err := json.NewDecoder(r.Body).Decode(&data)
 	if err != nil {
 		log.Printf("error: %v", err)
-		SendErr(w, http.StatusBadRequest, "invalid json")
+		SendErr(w, http.StatusBadRequest, fmt.Errorf("invalid json: %w", err).Error())
 
 		return
 	}
@@ -115,7 +116,7 @@ func (s *Server) updateUser(w http.ResponseWriter, r *http.Request) {
 	err := json.NewDecoder(r.Body).Decode(&data)
 	if err != nil {
 		log.Printf("error: %v", err)
-		SendErr(w, http.StatusBadRequest, "invalid json")
+		SendErr(w, http.StatusBadRequest, fmt.Errorf("invalid json: %w", err).Error())
 
 		return
 	}

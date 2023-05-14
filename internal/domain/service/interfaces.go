@@ -53,6 +53,9 @@ type BookingStorage interface {
 	CreateBooking(ctx context.Context, booking entity.Booking) (entity.Booking, error)
 	GetBookingsByResort(ctx context.Context, resortID int64) ([]entity.Booking, error)
 	GetBookingsByOwner(ctx context.Context, ownerID int64) ([]entity.Booking, error)
+
+	StatsBookingInventoryByOwner(ctx context.Context, f entity.StatisticFilter, ownerID int64) ([]entity.Stats, error)
+	StatsBookingInventoryByResorts(ctx context.Context, f entity.StatisticFilter, id int64) ([]entity.Stats, error)
 }
 
 type CommentStorage interface {

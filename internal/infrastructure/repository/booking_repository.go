@@ -108,3 +108,67 @@ func (r *BookingRepository) GetBookingsByOwner(ctx context.Context, ownerID int6
 
 	return dto.BookingsFromDB(booking), err
 }
+
+func (r *BookingRepository) StatsBookingInventoryByOwner(ctx context.Context, f entity.StatisticFilter, ownerID int64) ([]entity.Stats, error) {
+	var stats []dbmodel.Stats
+
+	err := r.BeginTx(ctx, func(tx *dbr.Tx) error {
+		stmt := r.selectViewsByPeriod(tx, f)
+
+		_, err := stmt.From("bookings").
+			LeftJoin("inventory", "bookings.inventory_id = inventory.id").
+			LeftJoin("resorts", "inventory.resort_id = resorts.id").
+			Where("resorts.owner_id = ?", ownerID).
+			Where("bookings.start_time >= ?", f.StartDate).
+			Where("bookings.start_time <= ?", f.EndDate).
+			Load(&stats)
+
+		return err
+	})
+
+	if errors.Is(err, domain.ErrNotFound) {
+		return []entity.Stats{}, nil
+	}
+
+	return dto.StatsFromDB(stats), err
+}
+func (r *BookingRepository) StatsBookingInventoryByResorts(ctx context.Context, f entity.StatisticFilter, id int64) ([]entity.Stats, error) {
+	var stats []dbmodel.Stats
+
+	err := r.BeginTx(ctx, func(tx *dbr.Tx) error {
+		stmt := r.selectViewsByPeriod(tx, f)
+
+		_, err := stmt.From("bookings").
+			LeftJoin("inventory", "bookings.inventory_id = inventory.id").
+			LeftJoin("resorts", "inventory.resort_id = resorts.id").
+			Where("resorts.id = ?", id).
+			Where("bookings.start_time >= ?", f.StartDate).
+			Where("bookings.start_time <= ?", f.EndDate).
+			Load(&stats)
+
+		return err
+	})
+
+	if errors.Is(err, domain.ErrNotFound) {
+		return []entity.Stats{}, nil
+	}
+
+	return dto.StatsFromDB(stats), err
+}
+
+func (r *BookingRepository) selectViewsByPeriod(tx *dbr.Tx, f entity.StatisticFilter) *dbr.SelectStmt {
+	switch f.GroupBy {
+	case entity.StatisticGroupByDay:
+		return tx.Select("date_trunc('day', bookings.start_time) as date, count(bookings.inventory_id), bookings.inventory_id").
+			GroupBy("date_trunc('day', bookings.start_time), bookings.inventory_id")
+	case entity.StatisticGroupByMonth:
+		return tx.Select("date_trunc('month', bookings.start_time) as date, count(bookings.inventory_id), bookings.inventory_id").
+			GroupBy("date_trunc('month', bookings.start_time), bookings.inventory_id")
+	case entity.StatisticGroupByYear:
+		return tx.Select("date_trunc('year', bookings.start_time) as date, count(bookings.inventory_id), bookings.inventory_id").
+			GroupBy("date_trunc('year', bookings.start_time), bookings.inventory_id")
+
+	default:
+		panic("unknown period")
+	}
+}

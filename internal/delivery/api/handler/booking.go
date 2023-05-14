@@ -72,7 +72,7 @@ func (s *Server) createBooking(w http.ResponseWriter, r *http.Request) {
 
 	err := json.NewDecoder(r.Body).Decode(&data)
 	if err != nil {
-		SendErr(w, http.StatusBadRequest, "invalid json")
+		SendErr(w, http.StatusBadRequest, fmt.Errorf("invalid json: %w", err).Error())
 
 		return
 	}
@@ -124,4 +124,60 @@ func (s *Server) getBookingByOwner(w http.ResponseWriter, r *http.Request) {
 
 	fmt.Println(resort)
 	SendOK(w, http.StatusOK, dto.BookingsToRest(resort))
+}
+
+func (s *Server) getStatsByOwner(w http.ResponseWriter, r *http.Request) {
+	var (
+		ctx = r.Context()
+		f   entity.StatisticFilter
+	)
+
+	err := json.NewDecoder(r.Body).Decode(&f)
+	if err != nil {
+		SendErr(w, http.StatusBadRequest, fmt.Errorf("invalid json: %w", err).Error())
+
+		return
+	}
+
+	resort, err := s.services.BookingService.StatsBookingInventoryByOwner(ctx, f)
+	if err != nil {
+		SendErr(w, http.StatusInternalServerError, err.Error())
+
+		return
+	}
+
+	fmt.Println(resort)
+	SendOK(w, http.StatusOK, dto.StatsToRest(resort))
+}
+
+func (s *Server) getStatsByResorts(w http.ResponseWriter, r *http.Request) {
+	var (
+		ctx = r.Context()
+		f   entity.StatisticFilter
+		id  = mux.Vars(r)["id"]
+	)
+
+	parseID, err := strconv.ParseInt(id, 10, 64)
+	if err != nil {
+		SendErr(w, http.StatusInternalServerError, err.Error())
+
+		return
+	}
+
+	err = json.NewDecoder(r.Body).Decode(&f)
+	if err != nil {
+		SendErr(w, http.StatusBadRequest, fmt.Errorf("invalid json: %w", err).Error())
+
+		return
+	}
+
+	resort, err := s.services.BookingService.StatsBookingInventoryByResorts(ctx, f, parseID)
+	if err != nil {
+		SendErr(w, http.StatusInternalServerError, err.Error())
+
+		return
+	}
+
+	fmt.Println(resort)
+	SendOK(w, http.StatusOK, dto.StatsToRest(resort))
 }

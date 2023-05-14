@@ -115,3 +115,39 @@ func (s *BookingService) GetBookingByOwner(ctx context.Context) ([]entity.Bookin
 
 	return booking, nil
 }
+
+func (s *BookingService) StatsBookingInventoryByOwner(ctx context.Context, f entity.StatisticFilter) ([]entity.Stats, error) {
+	user, ok := ctx.Value("user").(entity.User)
+	if !ok {
+		return []entity.Stats{}, domain.NewError(domain.ErrCodeNotAuthorized, "user is not authorized")
+	}
+
+	booking, err := s.repo.StatsBookingInventoryByOwner(ctx, f, user.ID)
+	if err != nil {
+		return []entity.Stats{}, err
+	}
+
+	return booking, nil
+}
+func (s *BookingService) StatsBookingInventoryByResorts(ctx context.Context, f entity.StatisticFilter, id int64) ([]entity.Stats, error) {
+	user, ok := ctx.Value("user").(entity.User)
+	if !ok {
+		return []entity.Stats{}, domain.NewError(domain.ErrCodeNotAuthorized, "user is not authorized")
+	}
+
+	resort, err := s.ResortsService.GetResortByID(ctx, id)
+	if err != nil {
+		return []entity.Stats{}, err
+	}
+
+	if resort.OwnerID != user.ID {
+		return []entity.Stats{}, errors.New("user is not owner")
+	}
+
+	booking, err := s.repo.StatsBookingInventoryByResorts(ctx, f, id)
+	if err != nil {
+		return []entity.Stats{}, err
+	}
+
+	return booking, nil
+}

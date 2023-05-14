@@ -72,3 +72,38 @@ func BookingCreateEntity(booking restmodel.Booking, userID int64) entity.Booking
 		EndTime:     booking.EndTime,
 	}
 }
+
+func StatFromDB(stats dbmodel.Stats) entity.Stats {
+	return entity.Stats{
+		Count:       stats.Count,
+		InventoryID: stats.InventoryID,
+		Date:        stats.Date,
+	}
+}
+
+func StatsFromDB(stats []dbmodel.Stats) []entity.Stats {
+	result := make([]entity.Stats, 0, len(stats))
+
+	for i := range stats {
+		result = append(result, StatFromDB(stats[i]))
+	}
+
+	return result
+}
+func StatToRest(stats entity.Stats) restmodel.Stats {
+	return restmodel.Stats{
+		Count:       stats.Count,
+		InventoryID: stats.InventoryID,
+		Date:        stats.Date,
+	}
+}
+
+func StatsToRest(stats []entity.Stats) []restmodel.Stats {
+	result := make([]restmodel.Stats, 0, len(stats))
+
+	for i := range stats {
+		result = append(result, StatToRest(stats[i]))
+	}
+
+	return result
+}

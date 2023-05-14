@@ -2,6 +2,7 @@ package handler
 
 import (
 	"encoding/json"
+	"fmt"
 	"io"
 	"net/http"
 	"strconv"
@@ -70,7 +71,7 @@ func (s *Server) createInventory(w http.ResponseWriter, r *http.Request) {
 
 	err := json.NewDecoder(r.Body).Decode(&data)
 	if err != nil {
-		SendErr(w, http.StatusBadRequest, "invalid json")
+		SendErr(w, http.StatusBadRequest, fmt.Errorf("invalid json: %w", err).Error())
 
 		return
 	}
@@ -101,7 +102,7 @@ func (s *Server) updateInventory(w http.ResponseWriter, r *http.Request) {
 
 	err := json.NewDecoder(r.Body).Decode(&data)
 	if err != nil {
-		SendErr(w, http.StatusBadRequest, "invalid json")
+		SendErr(w, http.StatusBadRequest, fmt.Errorf("invalid json: %w", err).Error())
 
 		return
 	}
@@ -188,7 +189,7 @@ func (s *Server) getInventoriesByFilters(w http.ResponseWriter, r *http.Request)
 
 	err := json.NewDecoder(r.Body).Decode(&data)
 	if err != nil {
-		SendErr(w, http.StatusBadRequest, "invalid json")
+		SendErr(w, http.StatusBadRequest, fmt.Errorf("invalid json: %w", err).Error())
 
 		return
 	}

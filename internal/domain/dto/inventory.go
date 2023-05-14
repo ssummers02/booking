@@ -7,13 +7,20 @@ import (
 )
 
 func InventoryFromDB(db dbmodel.Inventory) entity.Inventory {
-	return entity.Inventory{
+	res := entity.Inventory{
 		ID:       db.ID,
 		TypeID:   db.TypeID,
 		ResortID: db.ResortID,
 		Price:    db.Price,
-		Photo:    db.Photo,
 	}
+
+	if db.Photo != nil {
+		res.Photo = *db.Photo
+	}
+	if db.Name != nil {
+		res.Name = *db.Name
+	}
+	return res
 }
 
 func InventorysFromDB(db []dbmodel.Inventory) []entity.Inventory {
@@ -31,7 +38,6 @@ func InventoryToDB(e entity.Inventory) dbmodel.Inventory {
 		TypeID:   e.TypeID,
 		ResortID: e.ResortID,
 		Price:    e.Price,
-		Photo:    e.Photo,
 	}
 }
 
@@ -42,6 +48,7 @@ func InventoryToRest(e entity.Inventory) restmodel.Inventory {
 		ResortID: e.ResortID,
 		Price:    e.Price,
 		Photo:    e.Photo,
+		Name:     e.Name,
 	}
 }
 

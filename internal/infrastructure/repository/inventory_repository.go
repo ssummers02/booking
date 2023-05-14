@@ -147,16 +147,11 @@ func (r *InventoryRepository) UpdateImg(ctx context.Context, e entity.Img) (enti
 	img := dto.ImgToDB(e)
 
 	err := r.BeginTx(ctx, func(tx *dbr.Tx) error {
-		stmt, err := tx.Prepare("INSERT INTO images (inventory_id, name, data) " +
-			"VALUES ($1, $2, $3) " +
-			"ON CONFLICT (inventory_id) DO UPDATE SET name = $2, data = $3 ")
-		if err != nil {
-			return err
-		}
-
-		defer stmt.Close()
-
-		_, err = stmt.Exec(img.InventoryID, img.Name, img.Bytes)
+		_, err := tx.Update("inventory").
+			Set("data", img.Bytes).
+			Set("name", img.Name).
+			Where("id = ?", img.InventoryID).
+			Exec()
 		if err != nil {
 			return err
 		}
@@ -172,8 +167,8 @@ func (r *InventoryRepository) GetImgByInventoryID(ctx context.Context, id int64)
 
 	err := r.BeginTx(ctx, func(tx *dbr.Tx) error {
 		return tx.Select("*").
-			From("images").
-			Where("inventory_id = ?", id).
+			From("inventory").
+			Where("id = ?", id).
 			LoadOne(&img)
 	})
 

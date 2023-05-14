@@ -7,7 +7,8 @@ type Inventory struct {
 	TypeID   int64
 	ResortID int64
 	Price    int64
-	Photo    string
+	Photo    []byte
+	Name     string
 }
 
 type InventoryType struct {

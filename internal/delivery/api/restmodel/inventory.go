@@ -7,7 +7,8 @@ type Inventory struct {
 	TypeID   int64  `json:"type_id" validate:"required"`
 	ResortID int64  `json:"resort_id" validate:"required"`
 	Price    int64  `json:"price" validate:"required"`
-	Photo    string `json:"photo"`
+	Photo    []byte `json:"photo"`
+	Name     string `json:"inventory_name"`
 }
 
 type InventoryType struct {

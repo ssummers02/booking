@@ -39,7 +39,7 @@ func (r *BookingRepository) GetBookingsByUserID(ctx context.Context, userID int6
 	var bookings []dbmodel.Booking
 
 	err := r.BeginTx(ctx, func(tx *dbr.Tx) error {
-		_, err := tx.Select("bookings.*, inventory.type_id, inventory.resort_id,inventory.price,inventory.photo, resorts.resorts_name, resorts.city_id, resorts.owner_id, resorts.description, resorts.address").
+		_, err := tx.Select("bookings.*, inventory.type_id, inventory.resort_id,inventory.price, resorts.resorts_name, resorts.city_id, resorts.owner_id, resorts.description, resorts.address").
 			From("bookings").
 			LeftJoin("inventory", "bookings.inventory_id = inventory.id").
 			LeftJoin("resorts", "inventory.resort_id = resorts.id").
@@ -71,7 +71,7 @@ func (r *BookingRepository) GetBookingsByResort(ctx context.Context, resortID in
 	var booking []dbmodel.Booking
 
 	err := r.BeginTx(ctx, func(tx *dbr.Tx) error {
-		_, err := tx.Select("bookings.*, inventory.type_id, inventory.resort_id,inventory.price,inventory.photo, resorts.resorts_name, resorts.city_id, resorts.owner_id, resorts.description, resorts.address").
+		_, err := tx.Select("bookings.*, inventory.type_id, inventory.resort_id,inventory.price, resorts.resorts_name, resorts.city_id, resorts.owner_id, resorts.description, resorts.address").
 			From("bookings").
 			LeftJoin("inventory", "bookings.inventory_id = inventory.id").
 			LeftJoin("resorts", "inventory.resort_id = resorts.id").
@@ -93,7 +93,7 @@ func (r *BookingRepository) GetBookingsByOwner(ctx context.Context, ownerID int6
 	var booking []dbmodel.Booking
 
 	err := r.BeginTx(ctx, func(tx *dbr.Tx) error {
-		_, err := tx.Select("bookings.*, inventory.type_id, inventory.resort_id,inventory.price, inventory.photo, resorts.resorts_name, resorts.city_id, resorts.owner_id, resorts.description, resorts.address").
+		_, err := tx.Select("bookings.*, inventory.type_id, inventory.resort_id,inventory.price,  resorts.resorts_name, resorts.city_id, resorts.owner_id, resorts.description, resorts.address").
 			From("bookings").
 			LeftJoin("inventory", "bookings.inventory_id = inventory.id").
 			LeftJoin("resorts", "inventory.resort_id = resorts.id").

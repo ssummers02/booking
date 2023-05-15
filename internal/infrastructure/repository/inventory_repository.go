@@ -52,7 +52,7 @@ func (r *InventoryRepository) CreateInventory(ctx context.Context, e entity.Inve
 	err := r.BeginTx(ctx, func(tx *dbr.Tx) error {
 		return tx.InsertInto("inventory").
 			Returning("id").
-			Columns("type_id", "resort_id", "price", "photo").
+			Columns("type_id", "resort_id", "price").
 			Record(&inventory).
 			Load(&inventory.ID)
 	})

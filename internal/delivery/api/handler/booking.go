@@ -122,7 +122,6 @@ func (s *Server) getBookingByOwner(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	fmt.Println(resort)
 	SendOK(w, http.StatusOK, dto.BookingsToRest(resort))
 }
 

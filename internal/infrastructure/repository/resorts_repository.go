@@ -65,7 +65,7 @@ func (r *ResortRepository) CreateResort(ctx context.Context, e entity.Resort) (e
 	err := r.BeginTx(ctx, func(tx *dbr.Tx) error {
 		return tx.InsertInto("resorts").
 			Returning("id").
-			Columns("name", "owner_id", "city_id", "description", "address").
+			Columns("resorts_name", "owner_id", "city_id", "description", "address").
 			Record(&resort).
 			Load(&resort.ID)
 	})
@@ -78,7 +78,7 @@ func (r *ResortRepository) UpdateResort(ctx context.Context, e entity.Resort) (e
 
 	err := r.BeginTx(ctx, func(tx *dbr.Tx) error {
 		_, err := tx.Update("resorts").
-			Set("name", resort.Name).
+			Set("resorts_name", resort.Name).
 			Set("city_id", resort.CityID).
 			Set("description", resort.Description).
 			Set("address", resort.Address).

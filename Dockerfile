@@ -13,7 +13,7 @@ COPY ./ ./
 
 # Download dependencies and build the application
 RUN go mod download
-RUN go build -o app ./cmd/main.go
+RUN go build -o /app ./cmd/main.go
 
 # Stage 2: Create the final image
 FROM alpine:latest

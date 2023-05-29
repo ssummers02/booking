@@ -1,36 +1,11 @@
 package service
 
-import (
-	"context"
-
-	"github.com/ssummers02/booking/internal/domain/entity"
-)
-
 type Service struct {
-	entity.Transactioner
-
 	UsersService     UsersService
 	ResortsService   ResortsService
 	InventoryService InventoryService
 	BookingService   BookingService
 	CommentService   CommentService
-}
-
-func (s *Service) DoTransaction(ctx context.Context, f func() error) (err error) {
-	tx, err := s.NewTransaction(ctx)
-	if err != nil {
-		return err
-	}
-
-	defer tx.RollbackUnlessCommitted()
-
-	err = f()
-
-	if err != nil {
-		return err
-	}
-
-	return tx.Commit()
 }
 
 func NewServices(r *Storages) *Service {

@@ -7,8 +7,6 @@ import (
 )
 
 type UserStorage interface {
-	entity.Transactioner
-
 	GetUsersByEmail(ctx context.Context, mail string) (entity.User, error)
 	CreateUser(ctx context.Context, e entity.User) (entity.User, error)
 	DeleteUser(ctx context.Context, id int64) error
@@ -17,8 +15,6 @@ type UserStorage interface {
 }
 
 type ResortStorage interface {
-	entity.Transactioner
-
 	GetResorts(ctx context.Context) ([]entity.Resort, error)
 	GetResortByID(ctx context.Context, id int64) (entity.Resort, error)
 	GetResortByOwnerID(ctx context.Context, id int64) ([]entity.Resort, error)
@@ -32,8 +28,6 @@ type ResortStorage interface {
 }
 
 type InventoryStorage interface {
-	entity.Transactioner
-
 	GetInventoryByID(ctx context.Context, id int64) (entity.Inventory, error)
 	GetInventoryByResortID(ctx context.Context, resortID int64) ([]entity.Inventory, error)
 	CreateInventory(ctx context.Context, e entity.Inventory) (entity.Inventory, error)
@@ -46,8 +40,6 @@ type InventoryStorage interface {
 }
 
 type BookingStorage interface {
-	entity.Transactioner
-
 	GetBookingByID(ctx context.Context, id int64) (entity.Booking, error)
 	GetBookingsByUserID(ctx context.Context, userID int64) ([]entity.Booking, error)
 	CreateBooking(ctx context.Context, booking entity.Booking) (entity.Booking, error)
@@ -59,8 +51,6 @@ type BookingStorage interface {
 }
 
 type CommentStorage interface {
-	entity.Transactioner
-
 	CreateComment(ctx context.Context, booking entity.Comment) (entity.Comment, error)
 	GetCommentByID(ctx context.Context, id int64) (entity.Comment, error)
 	GetCommentsByResort(ctx context.Context, id int64) ([]entity.Comment, error)
